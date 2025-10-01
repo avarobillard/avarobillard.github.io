@@ -1,6 +1,6 @@
 ---
 title: "Ava Robillard"
-image: headshot.jpg
+image: longer_headshot.jpg
 about:
   template: trestles
   image-shape: round
