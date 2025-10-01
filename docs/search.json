@@ -1,16 +1,16 @@
 [
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
-    "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
-  },
-  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Ava Robillard",
     "section": "",
     "text": "Hi! I’m Ava Robillard, and I am an early career data scientist. My background is in plant science and I am passionate about expanding this subject area to broader issues in sustainability with creative as well as organized data science approaches. When I’m not busy coding, you can usually find me out hiking, running, or reading."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site\n\n1 + 1\n\n[1] 2"
   }
 ]
