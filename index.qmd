@@ -1,5 +1,19 @@
 ---
-title: "avarobillard.github.io"
+title: "Ava Robillard"
+image: headshot.jpg
+about:
+  template: trestles
+  image-shape: round
+  image-width: 17em
+  links: 
+    - text: LinkedIn
+      href: https://www.linkedin.com/in/avarobillard/
+      target: _blank
+    - text: GitHub
+      href: https://github.com/avarobillard
+      target: _blank
+    - text: Email
+      href: mailto:avarobillard@bren.ucsb.edu
 ---
 
-Hi this is Ava!
+Hi! I'm Ava Robillard, and I am an early career data scientist. My background is in plant science and I am passionate about expanding this subject area to broader issues in sustainability with creative as well as organized data science approaches. When I’m not busy coding, you can usually find me out hiking, running, or reading.
