@@ -1,0 +1,12 @@
+# any options specified here will apply to all posts in the posts/ folder
+
+author: 
+  - name: Ava Robillard
+    url: https://avarobillard.github.io/
+    affiliation: The Bren School of Environmental Science & Management, MEDS
+    affiliation-url: https://bren.ucsb.edu/masters-programs/master-environmental-data-science/ 
+    orcid: 0009-0000-6443-0622
+    
+title-block-banner: true
+
+freeze: auto

@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Ava Robillard",
-    "section": "",
-    "text": "Hi! I’m Ava Robillard, and I am an early career data scientist. My background is in plant science and I am passionate about expanding this subject area to broader issues in sustainability with creative as well as organized data science approaches. When I’m not busy coding, you can usually find me out hiking, running, or reading."
-  },
-  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
@@ -28,10 +21,17 @@
     "text": "What I do for fun\nHere’s what I do for fun"
   },
   {
-    "objectID": "resources.html",
-    "href": "resources.html",
-    "title": "resources",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Ava Robillard",
     "section": "",
-    "text": "this is an h1 element\n\n\nthis is an h1 element with the title class\n\n\nthis paragraph is orange\n\n\nthis text is centered\n\n\nthis text is both centered and orange\n\n\nHere’s where I’m describing something fun that I enjoy doing\nHere’s a full line\n\nHere’s one line\nHere’s another line"
+    "text": "Hi! I’m Ava Robillard, and I am an early career data scientist. My background is in plant science and I am passionate about expanding this subject area to broader issues in sustainability with creative as well as organized data science approaches. When I’m not busy coding, you can usually find me out hiking, running, or reading."
+  },
+  {
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "Blog",
+    "section": "",
+    "text": "No matching items"
   }
 ]
