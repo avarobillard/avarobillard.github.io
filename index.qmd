@@ -6,13 +6,13 @@ about:
   image-shape: round
   image-width: 17em
   links: 
-    - text: LinkedIn
+    - icon: linkedin
       href: https://www.linkedin.com/in/avarobillard/
       target: _blank
-    - text: GitHub
+    - icon: github
       href: https://github.com/avarobillard
       target: _blank
-    - text: Email
+    - icon: envelope
       href: mailto:avarobillard@bren.ucsb.edu
 ---
 

@@ -4,20 +4,32 @@ project:
 
 website:
   title: "Ava Robillard"
+  #favicon: images/favicon.png
   navbar:
+    #logo: images/logo.png
+    #logo-alt: insert description of logo
     right:
       - href: index.qmd
         text: Home
-      # - about.qmd
-      # - href: resources.qmd
-      #   text: Resources
+      #- about.qmd
+      #- posts.qmd
+      #- href: resources.qmd
+      #  text: Resources
+      - icon: github
+        href: https://github.com/avarobillard/avarobillard.github.io 
+  #page-footer: 
+     #left: Copyright 2025, Ava Robillard
+     #right: 
+      #- icon: github
+        #href: https://github.com/avarobillard 
 
 format:
   html:
+    #theme: styles.scss
     theme: lux
-    css: styles.css
     toc: true
     page-layout: full
+    #mainfont: Figtree
 
 
 

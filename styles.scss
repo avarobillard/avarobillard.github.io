@@ -1,0 +1,48 @@
+/*-- scss:defaults --*/
+
+// import google fonts
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Libre+Caslon+Display&display=swap');
+
+// fonts 
+$figtree: "Figtree", sans-serif;
+$librecaslon: "Libre Caslon Display", serif;
+
+// colors
+$color-1: #D1D7DA;
+$color-2: #BBD2E7;
+$color-3: #B5A6AA;
+$color-4: #40515A;
+$color-5: #6B6056;
+
+// define quarto variables
+$body-bg: $color-4;
+$navbar-bg: $color-2;
+$navbar-fg: $color-5;
+$navbar-hl: $color-4;
+$link-color: $color-4;
+$body-color: $color-1;
+
+/*-- scss:rules --*/
+
+h1, h2, h3, h4{
+  font-family: $librecaslon;
+}
+
+
+
+h1, h2 {
+  letter-spacing: 3px;
+  font-weight: 700;
+}
+
+.title {
+  color: pink;
+}
+
+.center-text{
+  text-align: center;
+}
+
+.orange-text {
+  color: lightpink;
+}
