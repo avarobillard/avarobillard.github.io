@@ -1,0 +1,13 @@
+---
+title: "EDS 223: Houston Power Grids"
+description: "A geospatial analyis of the effects of winter storms on power outages"
+date: 2025-12-01
+categories: [MEDS, R]
+#image: fire.png
+citation:
+  url: https://avarobillard.github.io/posts/2025-12-01-eds223
+#bibliography: references.bib
+draft: false
+#draft-mode: linked
+---
+

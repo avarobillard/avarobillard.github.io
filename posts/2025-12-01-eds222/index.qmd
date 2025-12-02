@@ -1,0 +1,13 @@
+---
+title: "EDS 222: Herbarium Specimen Phenology"
+description: "A statistical analysis of shifts in leaf color timing"
+date: 2025-12-01
+categories: [MEDS, R]
+#image: fire.png
+citation:
+  url: https://avarobillard.github.io/posts/2025-12-01-eds222
+#bibliography: references.bib
+draft: false
+#draft-mode: linked
+---
+
