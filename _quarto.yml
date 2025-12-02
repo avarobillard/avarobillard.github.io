@@ -11,10 +11,10 @@ website:
     right:
       - href: index.qmd
         text: Home
-      - about.qmd
-      - posts.qmd
-      - href: resources.qmd
-        text: Resources
+      #- about.qmd
+      #- posts.qmd
+      #- href: resources.qmd
+      #  text: Resources
       - icon: github
         href: https://github.com/avarobillard/avarobillard.github.io 
   #page-footer: 
@@ -25,10 +25,11 @@ website:
 
 format:
   html:
-    theme: styles.scss
+    #theme: styles.scss
+    theme: lux
     toc: true
     page-layout: full
-    mainfont: Figtree
+    #mainfont: Figtree
 
 
 
