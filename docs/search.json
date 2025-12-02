@@ -1,5 +1,26 @@
 [
   {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Here’s where I describe what I do professionally"
+  },
+  {
+    "objectID": "about.html#what-i-do-for-work",
+    "href": "about.html#what-i-do-for-work",
+    "title": "About",
+    "section": "",
+    "text": "Here’s where I describe what I do professionally"
+  },
+  {
+    "objectID": "about.html#what-i-do-for-fun",
+    "href": "about.html#what-i-do-for-fun",
+    "title": "About",
+    "section": "What I do for fun",
+    "text": "What I do for fun\nHere’s what I do for fun"
+  },
+  {
     "objectID": "index.html",
     "href": "index.html",
     "title": "Ava Robillard",
@@ -7,10 +28,10 @@
     "text": "Hi! I’m Ava Robillard, and I am an early career data scientist. My background is in plant science and I am passionate about expanding this subject area to broader issues in sustainability with creative as well as organized data science approaches. When I’m not busy coding, you can usually find me out hiking, running, or reading."
   },
   {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "posts.html",
+    "href": "posts.html",
+    "title": "Blog",
     "section": "",
-    "text": "About this site\n\n1 + 1\n\n[1] 2"
+    "text": "No matching items"
   }
 ]
