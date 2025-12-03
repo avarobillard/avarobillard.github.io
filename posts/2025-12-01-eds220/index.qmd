@@ -6,12 +6,19 @@ categories: [MEDS, Python]
 image: fire.png
 citation:
   url: https://avarobillard.github.io/posts/2025-12-01-eds220
-#bibliography: references.bib
+bibliography: references.bib
 draft: false
 #draft-mode: linked
 ---
 
-In this blog, a [false color image](https://earthobservatory.nasa.gov/features/FalseColor) is created using Landsat remote sensing and fire perimeter data to highlight the locations of the Palisades Fire and Eaton Fire in Los Angeles County, California that occurred in early January 2025.
+The Palisades Eaton Fires occurred in early January 2025 in very populated areas of Los Angeles County, California. Both fires began on January 7th and burned a total of about 37,469 acres [@starr2025spread].
+
+::: {.figure}
+![Map of Palisades and Eaton Fire Perimeters](fire_perimeters_map.png)
+Fig. 1: Fire perimeters over Los Angeles, January 2025.
+:::
+
+In this blog, we will walk through how to create a [false color image](https://earthobservatory.nasa.gov/features/FalseColor) using Landsat remote sensing and fire perimeter data to highlight the locations of the Palisades and Eaton Fires. We will also look at socioeconomic risk factors that could influence a community's response to a wildfire in the form of a [chloropleth map](https://en.wikipedia.org/wiki/Choropleth_map).
 
 ### Analysis highlights:
 
@@ -20,26 +27,27 @@ In this blog, a [false color image](https://earthobservatory.nasa.gov/features/F
 -   Creation of true color and false color images using Landsat bands
 -   Mapping of vector and raster data and customization with `matplotlib`
 
+Check out the full analysis in detail on the associated [GitHub repository](https://github.com/avarobillard/eaton-palisades-fires-analysis)!
+
 ### About the data:
 
-In this notebook we use two datasets:
+We will be using three datasets:
 
 **1) Fire perimeter data**
 
-The data used to map the fire perimeters were retrieved as two shapefiles from the [City of Los Angeles GeoHub.](https://geohub.lacity.org/maps/ad51845ea5fb4eb483bc2a7c38b2370c/about) The layers contained dissolved fire perimeters in the form of polygons for the Eaton and Palisades fires. Each layer contained columns with an OBJECTID, type (Heat Perimeter), shape area and shape length, and a geometry column.
+The data used to map the fire perimeters were retrieved as two shapefiles from the [City of Los Angeles GeoHub.](https://geohub.lacity.org/maps/ad51845ea5fb4eb483bc2a7c38b2370c/about) The layers contained dissolved fire perimeters in the form of polygons for the Eaton and Palisades fires. Each layer contained columns with an OBJECTID, type (Heat Perimeter), shape area and shape length, and a geometry column [@la2025_palisades_eaton_perimeters].
 
 **2) Landsat 8 satellite data**
 
-Landsat Collection 2 Level-2 atmospherically corrected surface reflectance data collected by the Landsat 8 satellite was used for this analysis, retrieved as a simplified collection of bands from the [Microsoft Planetary Computer data catalogue.](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) This data was then clipped to the area of interest surrounding the fire perimeters and used in the form of a NetCDF with the [red, green, blue, near-infrared and shortwave infrared bands](https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites) as variables.
+Landsat Collection 2 Level-2 atmospherically corrected surface reflectance data collected by the Landsat 8 satellite was used for this analysis, retrieved as a simplified collection of bands from the [Microsoft Planetary Computer data catalogue.](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) This data was then clipped to the area of interest surrounding the fire perimeters and used in the form of a NetCDF with the [red, green, blue, near-infrared and shortwave infrared bands](https://www.usgs.gov/faqs/what-are-band-designations-landsat-satellites) as variables [@mpc_landsat_c2_l2].
 
-### References:
+**3) Environmental Justice Index (EJI) data**
 
-City of Los Angeles. (2025). Palisades and Eaton Dissolved Fire Perimeters (2025) [GIS shapefiles]. Los Angeles GeoHub. Accessed November 20, 2025, from https://geohub.lacity.org/maps/ad51845ea5fb4eb483bc2a7c38b2370c/about
+2024 EJI data for California will be used for this analysis, retrieved in a geodatabase format from the [Agency for Toxic Substances and Disease Registry](https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html). This data contains a variety of socioeconomic variables that could influence a community's response to a wildfire, such as percentage without internet, aged 65+, or with asthma [@cdc_eji_year]. 
 
-Microsoft Planetary Computer. (n.d.). Landsat Collection 2 Level‑2 [Dataset]. Microsoft. Accessed November 20, 2025, from https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2
-
+#### Load packages
 ```{python}
-# Load packages
+#| code-fold: true
 import os
 import pandas as pd
 import numpy as np
@@ -52,7 +60,10 @@ import matplotlib.pyplot as plt
 
 ### 1. Fire perimeter data exploration
 
+First, we want to import the data and do some initial exploration.
+
 ```{python}
+#| code-fold: true
 # Import Palisades fire perimeter shapefile
 fp = os.path.join('data', 'Palisades_Perimeter_20250121', 'Palisades_Perimeter_20250121.shp')
 palisades_fire = gpd.read_file(fp)
@@ -62,36 +73,42 @@ fp = os.path.join('data', 'Eaton_Perimeter_20250121', 'Eaton_Perimeter_20250121.
 eaton_fire = gpd.read_file(fp)
 ```
 
+Palisades Fire:
 ```{python}
-# Display first few rows of Palisades fire data
-palisades_fire.head()
+#| code-fold: true
+# Display first row of Palisades fire data
+palisades_fire.head(1)
 ```
 
+Eaton Fire:
 ```{python}
-# Visualize fire perimeter
-palisades_fire.plot(color = "darkred")
-plt.axis("off")
+#| code-fold: true
+# Display first row of Eaton fire data
+eaton_fire.head(1)
+```
+
+Both data sets contain an OBJECTID, TYPE, SHAPE__ARE, SHAPE__LEN, and GEOMETRY column. The geometry type is polygon, so we can visualize what these look like using `matplotlib`.
+
+```{python}
+#| code-fold: true
+# Visualize polygons
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(9,5))
+
+palisades_fire.plot(ax=ax1, color = "darkred")
+eaton_fire.plot(ax=ax2, color = "darkred")
+
+# Set individual subplot titles
+ax1.set_title('Palisades Fire')
+ax2.set_title('Eaton Fire')
+
+ax1.axis('off')
+ax2.axis('off')
+
 plt.show()
 ```
 
 ```{python}
-# Display first few rows of Eaton fire data
-eaton_fire.head()
-```
-
-```{python}
-# Visualize fire perimeter
-eaton_fire.plot(color = "darkred")
-plt.axis("off")
-plt.show()
-```
-
-```{python}
-# Check the CRS
-palisades_fire.crs
-```
-
-```{python}
+#| code-fold: true
 # Examine CRS details
 print('Ellipsoid:', palisades_fire.crs.ellipsoid)
 print('Datum:', palisades_fire.crs.datum)
@@ -100,85 +117,75 @@ print('Is projected?:', palisades_fire.crs.is_projected)
 ```
 
 ```{python}
+#| code-fold: true
 # Check that the CRS is the same for both fire perimeter data sets
-palisades_fire.crs == eaton_fire.crs
+print('CRS match?:', palisades_fire.crs == eaton_fire.crs)
 ```
 
 Based on our preliminary exploration, the fire perimeter data is made up of polygons when looking at the geometry column. Both the Palisades and Eaton fire perimeter data have the same projected CRS, WGS 84.
 
 ### 2. NetCDF data import and exploration
 
+Next, we want to explore our `xarray` Landsat data, which comes in a NetCDF format. A NetCDF (network Common Data Form) is a data format that is designed to be self-describing and machine-independent, making it ideal for working with multi-dimensional datasets that have a lot of metadata required to understand the content. The [NetCDF data model](https://docs.unidata.ucar.edu/netcdf-c/current/netcdf_data_model.html#classic_model) consists of variables (the measured quantities), dimensions (the axes/independent quantities at which we measure the variables), and attributes (metadata). 
+
+Opening our NetCDF file with `xarray` gives us an `xarray.DataSet`, which contains all of the key components of a NetCDF as well as coordinates (the dimension's values/units) [@hoyer2017xarray].
+
 ```{python}
+#| code-fold: true
 # Import Landsat data as xarray.Dataset
 fp = os.path.join('data', 'landsat8-2025-02-23-palisades-eaton.nc')
 
 landsat = xr.open_dataset(fp)
-```
 
-```{python}
-# Explore dimensions, coordinates and data variables of Landsat data
 landsat
 ```
 
-```{python}
-# Check the dimensions of the dataset
-landsat.dims
-```
-
-```{python}
-# Check the attributes of the red variable
-landsat.red.attrs
-```
-
-```{python}
-# Check the attributes of the spatial_ref variable
-landsat.spatial_ref.attrs
-```
-
-When looking at the landsat xarray.Dataset, we can see that the coordinates include x, y, time, and spatial_ref. The data variables are red, green, blue, nir08, and swir22. When checking the dimensions of the dataset, we see that there are 1418 pixels in the y direction and 2742 pixels in the x direction, which makes up each data variable/band (red, green, blue, etc.). The attributes of the red variable included a spatial_ref. The other data variables contain the same attribute. There were many coordinate attributes for spatial_ref, including crs_wkt which tells us that the CRS should be EPSG 32611. 
+When exploring the landsat xarray.Dataset, we can see that the **coordinates** include x, y, time, and spatial_ref. The **data variables** are red, green, blue, nir08, and swir22. When checking the **dimensions** of the dataset at the top, we see that there are 1418 pixels in the y direction and 2742 pixels in the x direction, which makes up each data variable/band (red, green, blue, etc.). Click on the page icon to the right of the red variable- we see that the **attributes** included a spatial_ref. The other data variables contain the same attribute. There are many coordinate attributes for spatial_ref, including crs_wkt which tells us that the CRS should be EPSG 32611. 
 
 ### 3. Restoring geospatial information
 
 After exploring our data, we need to restore the geospatial information to the landsat xarray.Dataset and ensure that the coordinate reference systems for the fire perimeter data and landsat data match before performing further analyses.
 
 ```{python}
-# Check CRS of landsat data
-print(landsat.rio.crs)
+#| code-fold: true
+# Check CRS of Landsat data
+print('Landsat CRS:', landsat.rio.crs)
 ```
 
-`landsat` is not yet a geospatial object, but contains a CRS to apply.
-
+`landsat` is not yet a geospatial object, but contains a CRS to apply in the spatial_ref variable.
 ```{python}
+#| code-fold: true
 # Print the CRS contained in the crs_wkt attribute of the spatial_ref variable
 print(landsat.spatial_ref.crs_wkt)
 ```
 
+We can use this information to recover the geospatial information.
 ```{python}
-# Recover geospatial information by setting CRS on landsat xarray.Dataset
+#| code-fold: true
+# Recover geospatial information by setting CRS on Landsat xarray.Dataset
 landsat.rio.write_crs(32611, inplace=True)
-landsat.rio.crs
+print('Landsat CRS:', landsat.rio.crs)
 ```
 
+Lastly, we need to ensure that all three data sets match in CRS. 
 ```{python}
+#| code-fold: true
 # Reproject fire perimeter data to Landsat CRS
 palisades_fire = palisades_fire.to_crs(landsat.rio.crs)
 eaton_fire = eaton_fire.to_crs(landsat.rio.crs)
 
 # Confirm changes
-assert palisades_fire.crs == landsat.rio.crs
-assert eaton_fire.crs == landsat.rio.crs
+print('Palisades and Landsat CRS match?:', palisades_fire.crs == landsat.rio.crs)
+print('Eaton and Landsat CRS match?:', eaton_fire.crs == landsat.rio.crs)
 ```
 
 ### 4. True color image
 
-The next step is to create a true color (RBG) image using our landsat variables. In a true color image, the red, green, and blue RS bands are displayed in the red, green, blue channels, respectively.
+The next step is to create a true color (RBG) image using our Landsat variables. In a true color image, the red, green, and blue RS bands are displayed in the red, green, blue channels, respectively. 
 
+We first want to identify if there are NaN values to deal with before plotting the true color image and which bands these lie within.
 ```{python}
-# Create RBG image with landsat variables
-landsat[['red', 'green', 'blue']].to_array().plot.imshow()
-```
-
-```{python}
+#| code-fold: true
 # Identify which bands have NaN values using a list of the bands
 for band in ['red', 'green', 'blue', 'nir08', 'swir22']:
     count = np.isnan(landsat[band].values).sum()
@@ -186,18 +193,20 @@ for band in ['red', 'green', 'blue', 'nir08', 'swir22']:
 ```
 
 ```{python}
-# Correct image with substituted NaN values and adjusted scales
+#| code-fold: true
+# RGB image with substituted NaN values and adjusted scales
 landsat[['red', 'green', 'blue']].to_array().fillna(0).plot.imshow(robust = True)
 plt.show()
 ```
 
-In the first image, errors are encountered and nothing appears to be plotted due to the scale of the data and NaN values not being the correct type. Using **robust = True** uses 2nd and 98th percentiles of data instead of absolute min and max to avoid extreme outliers like clouds to make the image visible, correcting the scale and clipping range issue. **Filling the NaN values** (found mostly in the blue band) with 0 allows the values to be correctly cast and plotted. The final true color image shows a visible range of the band values.
+Using **robust = True** uses 2nd and 98th percentiles of data instead of absolute min and max avoids extreme outliers like clouds to make the image visible, correcting any scale and clipping range issues that might be encountered otherwise. **Filling the NaN values** (found mostly in the blue band) with 0 allows the values to be correctly cast and plotted. The final true color image shows a visible range of the band values.
 
 ### 5. False color image
 
 Next, we want to plot a preliminary false color image using the short-wave infrared (swir22), near-infrared, and red variables mapped to the red, green, and blue channels respectively. This allows us to see non-visible wavelenghts and better show aspects of our environment like burn severity.
 
 ```{python}
+#| code-fold: true
 # Create false color image
 landsat[['swir22', 'nir08', 'red']].to_array().fillna(0).plot.imshow(robust = True)
 plt.show()
@@ -205,9 +214,10 @@ plt.show()
 
 ### 6. Map
 
-Lastly, we want to combine all of our data into a visualization of false color fire scars and the original fire perimeters using `matplotlib`.
+Lastly, we want to combine all of our data into a visualization of false color fire scars and the original fire perimeters using `matplotlib`. Check out the code below to see how this was plotted in detail!
 
 ```{python}
+#| code-fold: true
 # Create map
 fig, ax = plt.subplots(figsize = (10,8))
 
@@ -260,143 +270,147 @@ plt.figtext(0.12, 0.13, " This false color image highlights the fire scars of th
 plt.show()
 ```
 
-### Conclusion
-
 In this analysis, we were able to process data in the form of shapefiles and a NetCDF in order to create a false color image showing fire burn scars. The Palisades and Eaton Fires clearly had an effect on the environment shown in our map, as these red areas contrast with the surrounding green.
 
 ## Social dimensions of Eaton and Palisades fires
 
-### 1. Metadata exploration
+Next, we want to look at the distribution of a socioeconomic variable within the bounds of the fires to better understand how the fires might have impacted different groups within the communities. One of the variables included in the Environmental Justice Index is the percentage of of persons without internet within each census tract. 
 
-Variables in EJI data that could influence a community's response to a wildfire:
-- Percentile rank of persons without internet 
-- ...
+### 1. EJI data exploration
 
+First, we want to import the data and do some initial exploration.
 ```{python}
-# Read in data- new for CRS
+#| code-fold: true
+# Load EJI data
 fp = os.path.join('data', 'EJI_2024_California', 'EJI_2024_California.gdb')
 eji = gpd.read_file(fp)
 
+# Load Palisades fire boundary
 fp = os.path.join('data', 'Palisades_Perimeter_20250121', 'Palisades_Perimeter_20250121.shp')
 palisades = gpd.read_file(fp)
 
+# Load Eaton fire boundary
 fp = os.path.join('data', 'Eaton_Perimeter_20250121', 'Eaton_Perimeter_20250121.shp')
 eaton = gpd.read_file(fp)
 ```
 
 ```{python}
-eji.head()
+#| code-fold: true
+# Check geometry type
+print('Geometry type:', eji.geom_type.iloc[0])
 ```
 
 ```{python}
-# Ensure the CRS match
+#| code-fold: true
+# Ensure the CRSs of all data sets match
 eji = eji.to_crs(epsg = 3857)
 
-eji.crs == palisades.crs
+# Confirm changes
+print('Palisades and EJI CRS match?:', palisades.crs == eji.crs)
+print('Eaton and EJI CRS match?:', eaton.crs == eji.crs)
 ```
 
+We need to spatially join the EJI data with the fire perimeters based on the geometry column, so we use an inner join to keep only the rows from EJI that intersect with the fire perimeter polygons.
 ```{python}
+#| code-fold: true
 # Spatially join EJI data with fire perimeters on geometry column
 census_within_palisades = gpd.sjoin(eji, palisades, how = 'inner', predicate = 'intersects')
 census_within_eaton = gpd.sjoin(eji, eaton, how = 'inner', predicate = 'intersects')
 ```
 
+Our data now contains both fire perimeter and EJI data.
 ```{python}
+#| code-fold: true
 # Confirm join
-census_within_palisades.head()
+census_within_palisades.head(3)
 ```
 
+When plotting this joined data, we see that the census tracts that were kept due to an intersection cover far more space than the fire perimeters, shown in dark red. 
 ```{python}
-# Create exploratoy map 
+#| code-fold: true
+# Create exploratory map 
 fig, ax = plt.subplots(figsize=(9,5), nrows = 1, ncols = 2)
 
-census_within_palisades.plot(ax=ax[0])
-palisades.boundary.plot(ax=ax[0], color = 'red')
-census_within_eaton.plot(ax=ax[1])
-eaton.boundary.plot(ax=ax[1], color = 'red')
+census_within_palisades.plot(ax=ax[0], color = "lightblue", edgecolor = "darkblue", linewidth = 0.5)
+palisades.boundary.plot(ax=ax[0], color = 'darkred')
+census_within_eaton.plot(ax=ax[1], color = "lightblue", edgecolor = "darkblue", linewidth = 0.5)
+eaton.boundary.plot(ax=ax[1], color = 'darkred')
 
+for a in ax:
+  a.axis('off')
 
 plt.show()
 ```
 
 ### 3. Polygon clipping
 
-Clip census tracts to palisades and eaton fire perimeter using `geopandas.clip()`
+To further reduce the census tracts to the fire perimeter boundaries, we will clip the census tracts to Palisades and Eaton fire perimeter using `geopandas.clip()`.
 ```{python}
+#| code-fold: true
 palisades_clipped = gpd.clip(census_within_palisades, palisades)
 eaton_clipped = gpd.clip(census_within_eaton, eaton)
-
-# Create exploratoy map 
-fig, ax = plt.subplots(figsize=(9,5), nrows = 1, ncols = 2)
-
-palisades_clipped.plot(ax=ax[0], edgecolor = "darkblue", linewidth = 2)
-eaton_clipped.plot(ax=ax[1])
-
-plt.show()
 ```
 
-### 4. Visualize fire perimeters with a basemap
 ```{python}
-fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+#| code-fold: true
+# Create exploratory map 
+fig, ax = plt.subplots(figsize=(9,5), nrows = 1, ncols = 2)
 
-# ADD FIRE PERIMETERS: UPDATE FILL TRANSPARENCY AND COLOR
-palisades.boundary.plot(ax=ax, color ='darkred')
-eaton.boundary.plot(ax=ax, color = 'red')
+palisades_clipped.plot(ax=ax[0], color = "lightblue", edgecolor = "darkblue", linewidth = 1.5)
+eaton_clipped.plot(ax=ax[1], color = "lightblue", edgecolor = "darkblue", linewidth = 1.5)
 
-# Add basemap using contextily
-ctx.add_basemap(ax, source=ctx.providers.OpenStreetMap.Mapnik, crs = palisades.crs)
+for a in ax:
+  a.axis('off')
 
-# ADD LEGEND OR ANNOTATION TO IDENTIFY EACH FIRE
-
-# ADD TITLE
-plt.title('Palisades and Eaton Fire Perimeters (2025)')
-
-ax.axis('off')
-
-plt.tight_layout()
 plt.show()
 ```
 
 ### 5. Visualize EJI data
+Lastly, we can use these clipped polygons to visualize the values of our variable of interest (percentage of persons without internet) within the census tracts within the fire perimeters.
+
 ```{python}
+#| code-fold: true
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
 
-# UPDATE WITH YOU EJI VARIABLE FROM STEP 1
-eji_variable = 'E_AGE65'
+# Include our EJI variable
+eji_variable = 'E_NOINT'
 
 # Find common min/max for legend range
 vmin = min(census_within_palisades[eji_variable].min(), census_within_eaton[eji_variable].min())
 vmax = max(census_within_palisades[eji_variable].max(), census_within_eaton[eji_variable].max())
 
 # Plot census tracts within Palisades perimeter
-census_within_palisades.plot(
+palisades_clipped.plot(
     column= eji_variable,
+    cmap = 'PuBuGn',
     vmin=vmin, vmax=vmax,
     legend=False,
     ax=ax1,
 )
-ax1.set_title('UPDATE TITLE')
+ax1.set_title('Palisades Fire')
 ax1.axis('off')
 
 # Plot census tracts within Eaton perimeter
-census_within_eaton.plot(
+eaton_clipped.plot(
     column=eji_variable,
+    cmap = 'PuBuGn',
     vmin=vmin, vmax=vmax,
     legend=False,
     ax=ax2,
 )
-ax2.set_title('UPDATE TITLE')
+ax2.set_title('Eaton Fire')
 ax2.axis('off')
 
 # Add overall title
-fig.suptitle('YOUR VARIABLE HERE - Fire Areas Comparison')
+fig.suptitle('Percentage of Persons Without Internet - Fire Areas Comparison')
 
 # Add shared colorbar at the bottom
-sm = plt.cm.ScalarMappable( norm=plt.Normalize(vmin=vmin, vmax=vmax))
+sm = plt.cm.ScalarMappable(cmap= 'PuBuGn', norm=plt.Normalize(vmin=vmin, vmax=vmax))
 cbar_ax = fig.add_axes([0.25, 0.08, 0.5, 0.02])  # [left, bottom, width, height]
 cbar = fig.colorbar(sm, cax=cbar_ax, orientation='horizontal')
-cbar.set_label('YOUR VARIABLE HERE (WITH UNITS)')
+cbar.set_label('Persons without internet (%)')
 
 plt.show()
 ```
 
+Based upon this map, we can see that some areas, especially within the Eaton Fire perimeter, had percentages of people without internet as high as 16%. Targeting these census tracts for wildfire resilience programs such as providing pre-planned courses of action when signs of fire are noticed or a list of places to notify using alternative methods in the case of a fire would be beneficial.
