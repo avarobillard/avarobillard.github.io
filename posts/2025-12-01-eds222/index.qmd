@@ -1,7 +1,7 @@
 ---
 title: "EDS 222: Herbarium Specimen Phenology"
 description: "A statistical analysis of shifts in leaf color timing"
-date: 2025-12-01
+date: 2025-12-09
 categories: [MEDS, R]
 image: acer.png
 citation:
@@ -23,7 +23,7 @@ Using this data, I want to analyze the effects of day of year (doy), year, and m
 ![DAG](images/herbaria_dag.png){width="60%"}
 :::
 
-I think that year, day of the year, and mean fall temperature all have an effect on whether a leaf is colored. Day of year is a seasonal relationship, where leaf coloration is expected the least in the summer (\~180-250 doy) and more after that period in the fall (\~250-300 doy). Cooler fall temperatures could cause a quicker onset of leaf coloration and senescence, while warmer mean temperatures could delay it. Year also could have an effect on how day of the year affects leaf coloration, as over time the day of year that is associated with higher probabilities of leaf coloration could shift. Year could also affect mean fall temperatures, as some years are generally warmer or cooler than others.
+I think that year, day of the year, and mean fall temperature all have an effect on whether a leaf is colored. Day of year is a seasonal relationship, where leaf coloration is expected the least in the summer (\~180-250 doy) and more after that period in the fall (\~250-300 doy). Cooler fall temperatures could cause a quicker onset of leaf coloration and senescence, while warmer mean temperatures could delay it. Year could affect leaf coloration through long-term trends in climate, and could also directly affect mean fall temperatures, as some years are generally warmer or cooler than others.
 
 ### Load packages and data
 
@@ -52,7 +52,7 @@ autumn_data <- read_csv(here::here("posts", "2025-12-01-eds222", "data", "autumn
 #| fig-cap: "Figure 1: Initial exploration of the spatial distribution of Herbarium specimens."
 
 ggplot(autumn_data, aes(x = longitude, y = latitude)) +
-  geom_point(alpha = 0.5, color = "darkgreen") +
+  geom_point(color = "darkgreen") +
   labs(x = "Longitude", y = "Latitude", 
        title = "Herbarium Specimen Locations") +
   theme_minimal()
@@ -94,9 +94,33 @@ ggplot(autumn_data_decades, aes(x = doy, y = colored_leaves, color = year)) +
 ```
 This plot shows that there are relatively few colored leaf data points in each year of observation, which might create a challenge when trying to draw conclusions. 
 
+```{r}
+#| warning: FALSE
+# Create 14-day bins (you can adjust bin size)
+autumn_binned <- autumn_data %>%
+  mutate(doy_bin = cut(doy, breaks = seq(0, 366, by = 14), include.lowest = TRUE)) %>%
+  group_by(doy_bin) %>%
+  summarize(
+    n = n(),
+    prop_colored = mean(colored_leaves),
+    doy_mid = mean(doy)
+  )
+
+ggplot(autumn_binned, aes(x = doy_mid, y = prop_colored)) +
+  geom_line(color = "#C41E3A", size = 1) +
+  geom_point(color = "#C41E3A", size = 2) +
+  labs(
+    x = "Day of Year",
+    y = "Proportion with Colored Leaves",
+    title = "Proportion of Colored Leaves by Day of Year (14-day bins)"
+  ) +
+  theme_minimal()
+```
+To address this, I binned day-of-year into 14-day intervals and computed the proportion of specimens with colored leaves in each bin. This aggregated plot more clearly shows seasonal trends and better matches the assumptions of later logistic regression modeling.
+
 ### 2. Fit model
 
-After exploring the data, I want to fit a binomial model with day of year, year, and mean fall temperature as predictors and colored leaves as a binary response.
+After exploring the data, I want to fit a logistic model with day of year, year, and mean fall temperature as predictors and colored leaves as a binary response.
 ```{r}
 # Binomial model
 bin_model <- glm(colored_leaves ~ doy + year + mean_fall,
@@ -112,7 +136,7 @@ tidy(bin_model) %>%
   kable_styling(bootstrap_options = "striped")
 ```
 
-Only the day of year variable is significant, with a p-value below 0.05. The positive coefficients for doy and mean_fall could indicate that the probability of colored leaves increases later in the year and with warmer fall temperatures. The slightly negative sign of year indicates that the probability of colored leaves decreases in some way each year.
+Only the day of year variable is significant, with a p-value below 0.05. The positive coefficients for doy and mean_fall could indicate that the probability of colored leaves increases later in the year and with warmer fall temperatures. The slightly negative sign of year indicates that the probability of colored leaves decreases each year.
 
 ### 3. Explore logistic curves over time
 
@@ -350,6 +374,13 @@ sim_dat <- tibble(x, afterbreakpoint, y)
 sim_mod <- glm(y ~ x + x:afterbreakpoint,
                  data = sim_dat,
                  family = binomial(link = "logit"))
+
+# Fit logistic model with x values before subtracting 10
+sim_mod_before <- glm(y ~ x_before, data = sim_dat,
+                    family = binomial)
+
+# Fit segmented model 
+seg_mod <- segmented(sim_mod_before, seg.Z = ~ x_before)
 ```
 
 4.  Check if the model's parameter estimates match selected parameters
@@ -361,13 +392,14 @@ mod_summ <- summary(sim_mod)
 beta_0_hat <- coef(sim_mod)[1]
 beta_1_hat <- coef(sim_mod)[2]
 beta_2_hat <- coef(sim_mod)[3]
+breakpoint_est <- summary(seg_mod)$psi[1, "Est."]
 
 # Create kable table with values for comparison
 comparison_table <- rbind(
-  Selected = round(c(beta0, beta1, beta2), 2),
-  Model = round(c(beta_0_hat, beta_1_hat, beta_2_hat), 2))
+  Selected = round(c(beta0, beta1, beta2, 10), 2),
+  Model = round(c(beta_0_hat, beta_1_hat, beta_2_hat, breakpoint_est), 2))
 
-colnames(comparison_table) <- c("Beta 0", "Beta 1", "Beta 2")
+colnames(comparison_table) <- c("Beta 0", "Beta 1", "Beta 2", "Breakpoint")
 
 kable(comparison_table, caption = "Coefficient Comparisons", align = "c") %>% 
   kable_styling(bootstrap_options = "striped")
@@ -377,7 +409,7 @@ The Intercept (beta 0) was very close to the selected value of 0, and the x (bet
 
 ### 5. Inference
 
-Now, I want to apply a segmented model to my original binomial model at an estimated break point in 1980.
+Now, I want to apply a segmented model to my original logistic model at an estimated break point in 1980.
 
 ```{r}
 # Segmented model using initial binomial model
