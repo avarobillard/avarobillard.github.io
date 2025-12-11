@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ava Robillard">
-<meta name="dcterms.date" content="2025-12-09">
+<meta name="dcterms.date" content="2025-12-11">
 <meta name="description" content="A statistical analysis of shifts in leaf color timing">
 
 <title>EDS 222: Herbarium Specimen Phenology – Ava Robillard</title>
@@ -239,7 +239,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">December 9, 2025</p>
+        <p class="date">December 11, 2025</p>
       </div>
     </div>
     
@@ -283,7 +283,7 @@ window.Quarto = {
 <div class="figure">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="images/herbaria_dag.png" class="img-fluid figure-img" style="width:60.0%"></p>
+<p><img src="DAG.png" class="img-fluid figure-img" style="width:60.0%"></p>
 <figcaption>DAG</figcaption>
 </figure>
 </div>
@@ -337,8 +337,8 @@ window.Quarto = {
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(autumn_data, <span class="fu">aes</span>(<span class="at">x =</span> doy, <span class="at">y =</span> colored_leaves, <span class="at">color =</span> species)) <span class="sc">+</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">width =</span> <span class="dv">0</span>, <span class="at">height =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#6F8FAF"</span>, <span class="st">"#8A9A5B"</span>)) <span class="sc">+</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day of year"</span>,</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Colored leaves"</span>) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day of Year"</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Colored Leaves"</span>) <span class="sc">+</span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
@@ -351,67 +351,72 @@ window.Quarto = {
 </div>
 </div>
 <p>The binary colored_leaves variable appears to have many more specimens with non-colored leaves, which are spread throughout the entire year but show a cluster between about doy 80 and 300. There are fewer specimens with colored leaves, with a more concentrated spread between doy 100 and 320. This data distribution suggests that a logistic regression model could be a good fit.</p>
+<p>A better way to visualize the colored_leaves variable and potentially see a seasonal trend is to group our observations into 2-week bins and calculate the proportion of colored leaves within each bin.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data to a few years to visualize this over time</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>autumn_data_decades <span class="ot">&lt;-</span> autumn_data <span class="sc">%&gt;%</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">1910</span>, <span class="dv">1920</span>, <span class="dv">1930</span>, <span class="dv">1940</span>, <span class="dv">1950</span>, <span class="dv">1960</span>, <span class="dv">1970</span>, <span class="dv">1980</span>, <span class="dv">1990</span>, <span class="dv">2000</span>, <span class="dv">2010</span>, <span class="dv">2020</span>))</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatter plot</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(autumn_data_decades, <span class="fu">aes</span>(<span class="at">x =</span> doy, <span class="at">y =</span> colored_leaves, <span class="at">color =</span> year)) <span class="sc">+</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">width =</span> <span class="dv">0</span>, <span class="at">height =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradientn</span>(<span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"#FFBF00"</span>, <span class="st">"orange"</span>,<span class="st">"#CC5500"</span>, <span class="st">"#C41E3A"</span>, <span class="st">"#660033"</span>), <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day of year"</span>,</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Colored leaves"</span>) <span class="sc">+</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>year) <span class="sc">+</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 14-day bins</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>autumn_binned <span class="ot">&lt;-</span> autumn_data <span class="sc">%&gt;%</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">doy_bin =</span> <span class="fu">cut</span>(doy, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">366</span>, <span class="at">by =</span> <span class="dv">14</span>), <span class="at">include.lowest =</span> <span class="cn">TRUE</span>, <span class="at">right =</span> <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(doy_bin) <span class="sc">%&gt;%</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n =</span> <span class="fu">n</span>(),  <span class="co"># total number within each bin</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">prop_colored =</span> <span class="fu">mean</span>(colored_leaves), <span class="co"># calculate proportion within each bin</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>            <span class="at">doy_mid =</span> <span class="fu">mean</span>(doy) <span class="co"># find mean doy of each bin for labeling</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create line plot</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(autumn_binned, <span class="fu">aes</span>(<span class="at">x =</span> doy_mid, <span class="at">y =</span> prop_colored)) <span class="sc">+</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#C41E3A"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#C41E3A"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day of Year"</span>,</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Proportion with Colored Leaves"</span>,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Proportion of Colored Leaves by Day of Year (2-week bins)"</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="index_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
-<figcaption>Figure 3: Initial exploration of the effects of day of the year on the presence of colored leaves (0/1).</figcaption>
+<figcaption>Figure 3: Visualization of proportion of colored leaves in each 2-week period of the year.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>There seems to be an increase in the proportion of colored leaves from approximately day 100 to a peak at day 300, before falling back to 0 around day 340. This reflects a seasonal trend, where leaves are increasingly more likely to be colored as fall approaches and peaks around day 300, and then fall from the trees for winter and return the proportion of colored leaves back to 0.</p>
+<p>Lastly, I want to visualize how many observations generally lie in each year.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter data to a few years to visualize this over time</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>autumn_data_decades <span class="ot">&lt;-</span> autumn_data <span class="sc">%&gt;%</span> </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">%in%</span> <span class="fu">c</span>(<span class="dv">1900</span>, <span class="dv">1910</span>, <span class="dv">1920</span>, <span class="dv">1930</span>, <span class="dv">1940</span>, <span class="dv">1950</span>, <span class="dv">1960</span>, <span class="dv">1970</span>, <span class="dv">1980</span>, <span class="dv">1990</span>, <span class="dv">2000</span>, <span class="dv">2010</span>, <span class="dv">2020</span>))</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create scatter plot</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(autumn_data_decades, <span class="fu">aes</span>(<span class="at">x =</span> doy, <span class="at">y =</span> colored_leaves, <span class="at">color =</span> year)) <span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">width =</span> <span class="dv">0</span>, <span class="at">height =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_gradientn</span>(<span class="at">colors =</span> <span class="fu">c</span>(<span class="st">"#FFBF00"</span>, <span class="st">"orange"</span>,<span class="st">"#CC5500"</span>, <span class="st">"#C41E3A"</span>, <span class="st">"#660033"</span>), <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Day of Year"</span>,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Colored Leaves"</span>) <span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>year) <span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Figure 4: Exploration of the effects of day of the year on the presence of colored leaves (0/1), separated by year.</figcaption>
 </figure>
 </div>
 </div>
 </div>
 <p>This plot shows that there are relatively few colored leaf data points in each year of observation, which might create a challenge when trying to draw conclusions.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 14-day bins (you can adjust bin size)</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>autumn_binned <span class="ot">&lt;-</span> autumn_data <span class="sc">%&gt;%</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">doy_bin =</span> <span class="fu">cut</span>(doy, <span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">366</span>, <span class="at">by =</span> <span class="dv">14</span>), <span class="at">include.lowest =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(doy_bin) <span class="sc">%&gt;%</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">n =</span> <span class="fu">n</span>(),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">prop_colored =</span> <span class="fu">mean</span>(colored_leaves),</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">doy_mid =</span> <span class="fu">mean</span>(doy)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(autumn_binned, <span class="fu">aes</span>(<span class="at">x =</span> doy_mid, <span class="at">y =</span> prop_colored)) <span class="sc">+</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"#C41E3A"</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"#C41E3A"</span>, <span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Day of Year"</span>,</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Proportion with Colored Leaves"</span>,</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Proportion of Colored Leaves by Day of Year (14-day bins)"</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>To address this, I binned day-of-year into 14-day intervals and computed the proportion of specimens with colored leaves in each bin. This aggregated plot more clearly shows seasonal trends and better matches the assumptions of later logistic regression modeling.</p>
 </section>
 <section id="fit-model" class="level3">
 <h3 class="anchored" data-anchor-id="fit-model">2. Fit model</h3>
 <p>After exploring the data, I want to fit a logistic model with day of year, year, and mean fall temperature as predictors and colored leaves as a binary response.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Binomial model</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Logistic model</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>bin_model <span class="ot">&lt;-</span> <span class="fu">glm</span>(colored_leaves <span class="sc">~</span> doy <span class="sc">+</span> year <span class="sc">+</span> mean_fall,</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">data =</span> autumn_data,</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">family =</span> <span class="fu">binomial</span>(<span class="at">link =</span> <span class="st">"logit"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -421,12 +426,12 @@ window.Quarto = {
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create coefficient table</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(bin_model) <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Coefficient Estimates for Binomial Model"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Coefficient Estimates for Logistic Model"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-striped caption-top table-sm small">
-<caption>Coefficient Estimates for Binomial Model</caption>
+<caption>Coefficient Estimates for Logistic Model</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">term</th>
@@ -469,7 +474,7 @@ window.Quarto = {
 </table>
 </div>
 </div>
-<p>Only the day of year variable is significant, with a p-value below 0.05. The positive coefficients for doy and mean_fall could indicate that the probability of colored leaves increases later in the year and with warmer fall temperatures. The slightly negative sign of year indicates that the probability of colored leaves decreases each year.</p>
+<p>Only the day of year (doy) variable is significant, with a p-value below 0.05. The positive coefficient for doy indicates that the probability of colored leaves increases later in the year, consistent with the seasonal pattern in our data exploration. Because the other predictors were not statistically significant and there is a relatively high possibility of getting these values by chance, we cannot infer that mean fall temperature and year have a meaningful effect on the probability of colored leaves.</p>
 </section>
 <section id="explore-logistic-curves-over-time" class="level3">
 <h3 class="anchored" data-anchor-id="explore-logistic-curves-over-time">3. Explore logistic curves over time</h3>
@@ -584,12 +589,12 @@ window.Quarto = {
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create coefficient table</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(bin_model_summer) <span class="sc">%&gt;%</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Coefficient Estimates for Binomial Decade Model"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>, <span class="at">caption =</span> <span class="st">"Coefficient Estimates for Logistic Decade Model"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(<span class="at">bootstrap_options =</span> <span class="st">"striped"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-striped caption-top table-sm small">
-<caption>Coefficient Estimates for Binomial Decade Model</caption>
+<caption>Coefficient Estimates for Logistic Decade Model</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th">term</th>
@@ -675,45 +680,17 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p>This plot shows a negative trend in leave coloration probability over time with a starting point of mid summer.</p>
+<p>This plot shows a negative trend in leave coloration probability over time with a starting point of mid summer, which is unexpected given our hypothesis. The coefficient for doy_summer was slightly negative and significant, indicating that for each day after mid-summer the probability of colored leaves decreased, as shown in our plot. This might be due to a lack of data in later summer and early fall days, or collection biases where trees that showed earlier color were collected because they were more noticeable.</p>
 </section>
 <section id="statistical-model-and-simulation" class="level3">
 <h3 class="anchored" data-anchor-id="statistical-model-and-simulation">4. Statistical model and simulation</h3>
-<p>Next, I want to try to use a segmented model to look at the rate of change between these curves and determine whether the doy at which the probability of having colored leaves increases shifts back at a faster rate after a certain year break point.</p>
+<p>Next, I want to apply a slightly more complex segmented model to my data. We can use a simplified model to simulate data from and better understand how a segmented model works:</p>
 <p><span class="math display">\[
 \text{BinaryOutcome} \sim \text{Binomial}(1, p)
-\]</span></p>
-<p><span class="math display">\[
-\text{logit}(p) =
-\beta_0 + \beta_1 \cdot \text{doy} + \beta_2 \cdot \text{year} + \beta_3 \cdot \text{year} \cdot \text{after} + \beta_4 \cdot \text{meanfall}
-\]</span></p>
-<p><span class="math display">\[
-\text{after}=
-\begin{cases}
-0 &amp; \text{if year} \le \psi \\
-1 &amp; \text{if year} &gt; \psi
-\end{cases}
-\]</span></p>
-<p>A segmented model allows for a change in the relationship between response and explanatory variables at a breakpoint, where beta 3 gets added to the slope of beta 2 if the year is beyond the breakpoint <span class="citation" data-cites="kaizer_segmented_regression">(<a href="#ref-kaizer_segmented_regression" role="doc-biblioref">Kaizer n.d.</a>)</span>. Based on this idea, I set up my hypotheses:</p>
-<section id="statistical-hypothesis" class="level4">
-<h4 class="anchored" data-anchor-id="statistical-hypothesis">Statistical hypothesis:</h4>
-<ul>
-<li><strong>Null hypothesis (H0):</strong> One slope describes the effect of year on leaf coloration (slopes are the same before and after breakpoint)</li>
-</ul>
-<p>H0: <span class="math inline">\(\beta_3 = 0\)</span></p>
-<ul>
-<li><strong>Alternative hypothesis (Ha):</strong> Multiple slopes describe the effect of year on leaf coloration (slopes are different before and after breakpoint)</li>
-</ul>
-<p>Ha: <span class="math inline">\(\beta_3 \neq 0\)</span></p>
-<p>Before applying this model to my actual data, we can use a simplified model to simulate data from and better understand how a segmented model works:</p>
-<p><span class="math display">\[
-\text{BinaryOutcome} \sim \text{Binomial}(1, p)
-\]</span></p>
-<p><span class="math display">\[
+\]</span> <span class="math display">\[
 \text{logit}(p) =
 \beta_0 + \beta_1 \cdot \text{x} + \beta_2 \cdot \text{x} \cdot \text{afterbreakpoint}
-\]</span></p>
-<p>Where afterbreakpoint is a binary variable where 0 corresponds to before the determined breakpoint and 1 is after. This allows us to have the different slopes depending upon where we are along the x-axis. This difference in slopes is beta 2.</p>
+\]</span> Where afterbreakpoint is a binary variable where 0 corresponds to before the determined breakpoint and 1 is after. This allows us to have the different slopes depending upon where we are along the x-axis. This difference in slopes is beta 2.</p>
 <p>We will use these steps:</p>
 <ol type="1">
 <li>Choose a set of parameters and predictor variable(s) for the simulation</li>
@@ -834,14 +811,40 @@ window.Quarto = {
 </table>
 </div>
 </div>
-<p>The Intercept (beta 0) was very close to the selected value of 0, and the x (beta 1) was very close to the selected value of 0.4. The x associated with being after the breakpoint (beta 2) was slightly lower than the selected value of 0.5.</p>
+<p>The Intercept (beta 0) was very close to the selected value of 0, and the x (beta 1) was very close to the selected value of 0.4. The x associated with being after the breakpoint (beta 2) was slightly lower than the selected value of 0.5. The model estimated a breakpoint of 11.43, which was similar to the selected value of 10.</p>
+<p>Now that we know how a segmented model works, I want to apply this model to my own data to look at the rate of change between the year curves and determine whether the doy at which the probability of having colored leaves increases shifts back at a faster rate after a certain year break point. To do this, we can describe our model in statistical notation:</p>
+<p><span class="math display">\[
+\text{BinaryOutcome} \sim \text{Binomial}(1, p)
+\]</span></p>
+<p><span class="math display">\[
+\text{logit}(p) =
+\beta_0 + \beta_1 \cdot \text{doy} + \beta_2 \cdot \text{year} + \beta_3 \cdot \text{year} \cdot \text{after} + \beta_4 \cdot \text{meanfall}
+\]</span></p>
+<p><span class="math display">\[
+\text{after}=
+\begin{cases}
+0 &amp; \text{if year} \le \psi \\
+1 &amp; \text{if year} &gt; \psi
+\end{cases}
+\]</span></p>
+<p>A segmented model allows for a change in the relationship between response and explanatory variables at a breakpoint, where beta 3 gets added to the slope of beta 2 if the year is beyond the breakpoint <span class="citation" data-cites="kaizer_segmented_regression">(<a href="#ref-kaizer_segmented_regression" role="doc-biblioref">Kaizer n.d.</a>)</span>. Based on this idea, I set up my hypotheses:</p>
+<section id="statistical-hypothesis" class="level4">
+<h4 class="anchored" data-anchor-id="statistical-hypothesis">Statistical hypothesis:</h4>
+<ul>
+<li><strong>Null hypothesis (H0):</strong> One slope describes the effect of year on leaf coloration (slopes are the same before and after breakpoint)</li>
+</ul>
+<p>H0: <span class="math inline">\(\beta_3 = 0\)</span></p>
+<ul>
+<li><strong>Alternative hypothesis (Ha):</strong> Multiple slopes describe the effect of year on leaf coloration (slopes are different before and after breakpoint)</li>
+</ul>
+<p>Ha: <span class="math inline">\(\beta_3 \neq 0\)</span></p>
 </section>
 </section>
 <section id="inference" class="level3">
 <h3 class="anchored" data-anchor-id="inference">5. Inference</h3>
 <p>Now, I want to apply a segmented model to my original logistic model at an estimated break point in 1980.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Segmented model using initial binomial model</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Segmented model using initial logistic model</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>seg_model <span class="ot">&lt;-</span> <span class="fu">segmented</span>(bin_model, <span class="at">seg.Z =</span> <span class="sc">~</span>year, <span class="at">psi =</span> <span class="fu">list</span>(<span class="at">year =</span> <span class="dv">1980</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
@@ -1120,13 +1123,13 @@ SERNEC. n.d. <span>“Herbarium Specimen Image: SERNEC ID 11605145.”</span> <a
 </div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{robillard2025,
   author = {Robillard, Ava},
   title = {EDS 222: {Herbarium} {Specimen} {Phenology}},
-  date = {2025-12-09},
+  date = {2025-12-11},
   url = {https://avarobillard.github.io/posts/2025-12-01-eds222},
   langid = {en}
 }
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-robillard2025" class="csl-entry quarto-appendix-citeas" role="listitem">
 Robillard, Ava. 2025. <span>“EDS 222: Herbarium Specimen
-Phenology.”</span> December 9, 2025. <a href="https://avarobillard.github.io/posts/2025-12-01-eds222">https://avarobillard.github.io/posts/2025-12-01-eds222</a>.
+Phenology.”</span> December 11, 2025. <a href="https://avarobillard.github.io/posts/2025-12-01-eds222">https://avarobillard.github.io/posts/2025-12-01-eds222</a>.
 </div></div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {

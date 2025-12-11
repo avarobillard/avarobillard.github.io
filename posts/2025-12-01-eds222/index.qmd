@@ -1,7 +1,7 @@
 ---
 title: "EDS 222: Herbarium Specimen Phenology"
 description: "A statistical analysis of shifts in leaf color timing"
-date: 2025-12-09
+date: 2025-12-11
 categories: [MEDS, R]
 image: acer.png
 citation:
@@ -20,7 +20,7 @@ A data set collected by Garretson and Forkner in 2021 from the Southeast Regiona
 Using this data, I want to analyze the effects of day of year (doy), year, and mean fall temperature on the presence of colored leaves as well as determine whether the day of the year when there becomes a higher probability of leaf color is shifting earlier over time.
 
 ::: figure
-![DAG](images/herbaria_dag.png){width="60%"}
+![DAG](DAG.png){width="60%"}
 :::
 
 I think that year, day of the year, and mean fall temperature all have an effect on whether a leaf is colored. Day of year is a seasonal relationship, where leaf coloration is expected the least in the summer (\~180-250 doy) and more after that period in the fall (\~250-300 doy). Cooler fall temperatures could cause a quicker onset of leaf coloration and senescence, while warmer mean temperatures could delay it. Year could affect leaf coloration through long-term trends in climate, and could also directly affect mean fall temperatures, as some years are generally warmer or cooler than others.
@@ -68,16 +68,46 @@ The specimens are located relatively uniformly throughout the Northeast.
 ggplot(autumn_data, aes(x = doy, y = colored_leaves, color = species)) +
   geom_jitter(alpha = 0.5, width = 0, height = 0.1) +
   scale_color_manual(values = c("#6F8FAF", "#8A9A5B")) +
-  labs(x = "Day of year",
-       y = "Colored leaves") +
+  labs(x = "Day of Year",
+       y = "Colored Leaves") +
   theme_minimal() 
 ```
 
-The binary colored_leaves variable appears to have many more specimens with non-colored leaves, which are spread throughout the entire year but show a cluster between about doy 80 and 300. There are fewer specimens with colored leaves, with a more concentrated spread between doy 100 and 320. This data distribution suggests that a logistic regression model could be a good fit. 
+The binary colored_leaves variable appears to have many more specimens with non-colored leaves, which are spread throughout the entire year but show a cluster between about doy 80 and 300. There are fewer specimens with colored leaves, with a more concentrated spread between doy 100 and 320. This data distribution suggests that a logistic regression model could be a good fit.  
+
+A better way to visualize the colored_leaves variable and potentially see a seasonal trend is to group our observations into 2-week bins and calculate the proportion of colored leaves within each bin. 
+
 ```{r}
 #| warning: FALSE
 #| code-fold: TRUE
-#| fig-cap: "Figure 3: Initial exploration of the effects of day of the year on the presence of colored leaves (0/1)."
+#| fig-cap: "Figure 3: Visualization of proportion of colored leaves in each 2-week period of the year."
+
+# Create 14-day bins
+autumn_binned <- autumn_data %>%
+  mutate(doy_bin = cut(doy, breaks = seq(0, 366, by = 14), include.lowest = TRUE, right = FALSE)) %>%
+  group_by(doy_bin) %>%
+  summarize(n = n(),  # total number within each bin
+            prop_colored = mean(colored_leaves), # calculate proportion within each bin
+            doy_mid = mean(doy) # find mean doy of each bin for labeling
+  )
+
+# Create line plot
+ggplot(autumn_binned, aes(x = doy_mid, y = prop_colored)) +
+  geom_line(color = "#C41E3A", size = 1) +
+  geom_point(color = "#C41E3A", size = 2) +
+  labs(x = "Day of Year",
+       y = "Proportion with Colored Leaves",
+       title = "Proportion of Colored Leaves by Day of Year (2-week bins)"
+  ) +
+  theme_minimal()
+```
+There seems to be an increase in the proportion of colored leaves from approximately day 100 to a peak at day 300, before falling back to 0 around day 340. This reflects a seasonal trend, where leaves are increasingly more likely to be colored as fall approaches and peaks around day 300, and then fall from the trees for winter and return the proportion of colored leaves back to 0.
+
+Lastly, I want to visualize how many observations generally lie in each year.
+```{r}
+#| warning: FALSE
+#| code-fold: TRUE
+#| fig-cap: "Figure 4: Exploration of the effects of day of the year on the presence of colored leaves (0/1), separated by year."
 
 # Filter data to a few years to visualize this over time
 autumn_data_decades <- autumn_data %>% 
@@ -87,42 +117,18 @@ autumn_data_decades <- autumn_data %>%
 ggplot(autumn_data_decades, aes(x = doy, y = colored_leaves, color = year)) +
   geom_jitter(alpha = 0.6, width = 0, height = 0.1) +
   scale_color_gradientn(colors = c("#FFBF00", "orange","#CC5500", "#C41E3A", "#660033"), guide = "none") +
-  labs(x = "Day of year",
-       y = "Colored leaves") +
+  labs(x = "Day of Year",
+       y = "Colored Leaves") +
   facet_wrap(~year) +
   theme_minimal() 
 ```
 This plot shows that there are relatively few colored leaf data points in each year of observation, which might create a challenge when trying to draw conclusions. 
 
-```{r}
-#| warning: FALSE
-# Create 14-day bins (you can adjust bin size)
-autumn_binned <- autumn_data %>%
-  mutate(doy_bin = cut(doy, breaks = seq(0, 366, by = 14), include.lowest = TRUE)) %>%
-  group_by(doy_bin) %>%
-  summarize(
-    n = n(),
-    prop_colored = mean(colored_leaves),
-    doy_mid = mean(doy)
-  )
-
-ggplot(autumn_binned, aes(x = doy_mid, y = prop_colored)) +
-  geom_line(color = "#C41E3A", size = 1) +
-  geom_point(color = "#C41E3A", size = 2) +
-  labs(
-    x = "Day of Year",
-    y = "Proportion with Colored Leaves",
-    title = "Proportion of Colored Leaves by Day of Year (14-day bins)"
-  ) +
-  theme_minimal()
-```
-To address this, I binned day-of-year into 14-day intervals and computed the proportion of specimens with colored leaves in each bin. This aggregated plot more clearly shows seasonal trends and better matches the assumptions of later logistic regression modeling.
-
 ### 2. Fit model
 
 After exploring the data, I want to fit a logistic model with day of year, year, and mean fall temperature as predictors and colored leaves as a binary response.
 ```{r}
-# Binomial model
+# Logistic model
 bin_model <- glm(colored_leaves ~ doy + year + mean_fall,
                  data = autumn_data,
                  family = binomial(link = "logit"))
@@ -132,11 +138,11 @@ bin_model <- glm(colored_leaves ~ doy + year + mean_fall,
 #| code-fold: TRUE
 # Create coefficient table
 tidy(bin_model) %>%
-  kable(digits = 3, caption = "Coefficient Estimates for Binomial Model") %>% 
+  kable(digits = 3, caption = "Coefficient Estimates for Logistic Model") %>% 
   kable_styling(bootstrap_options = "striped")
 ```
 
-Only the day of year variable is significant, with a p-value below 0.05. The positive coefficients for doy and mean_fall could indicate that the probability of colored leaves increases later in the year and with warmer fall temperatures. The slightly negative sign of year indicates that the probability of colored leaves decreases each year.
+Only the day of year (doy) variable is significant, with a p-value below 0.05. The positive coefficient for doy indicates that the probability of colored leaves increases later in the year, consistent with the seasonal pattern in our data exploration. Because the other predictors were not statistically significant and there is a relatively high possibility of getting these values by chance, we cannot infer that mean fall temperature and year have a meaningful effect on the probability of colored leaves.
 
 ### 3. Explore logistic curves over time
 
@@ -239,7 +245,7 @@ bin_model_summer <- glm(colored_leaves ~ doy_summer + decade + mean_fall,
 #| code-fold: TRUE
 # Create coefficient table
 tidy(bin_model_summer) %>%
-  kable(digits = 3, caption = "Coefficient Estimates for Binomial Decade Model") %>% 
+  kable(digits = 3, caption = "Coefficient Estimates for Logistic Decade Model") %>% 
   kable_styling(bootstrap_options = "striped")
 ```
 
@@ -277,52 +283,19 @@ ggplot(bin_model_pred2, aes(x = doy_summer, y = p, color = factor(decade))) +
   theme_minimal()
 ```
 
-This plot shows a negative trend in leave coloration probability over time with a starting point of mid summer.
+This plot shows a negative trend in leave coloration probability over time with a starting point of mid summer, which is unexpected given our hypothesis. The coefficient for doy_summer was slightly negative and significant, indicating that for each day after mid-summer the probability of colored leaves decreased, as shown in our plot. This might be due to a lack of data in later summer and early fall days, or collection biases where trees that showed earlier color were collected because they were more noticeable. 
 
 ### 4. Statistical model and simulation
 
-Next, I want to try to use a segmented model to look at the rate of change between these curves and determine whether the doy at which the probability of having colored leaves increases shifts back at a faster rate after a certain year break point.
+Next, I want to apply a slightly more complex segmented model to my data. We can use a simplified model to simulate data from and better understand how a segmented model works:
 
 $$
 \text{BinaryOutcome} \sim \text{Binomial}(1, p)
 $$
-
-$$
-\text{logit}(p) =
-\beta_0 + \beta_1 \cdot \text{doy} + \beta_2 \cdot \text{year} + \beta_3 \cdot \text{year} \cdot \text{after} + \beta_4 \cdot \text{meanfall}
-$$
-
-$$
-\text{after}=
-\begin{cases}
-0 & \text{if year} \le \psi \\
-1 & \text{if year} > \psi
-\end{cases}
-$$
-
-A segmented model allows for a change in the relationship between response and explanatory variables at a breakpoint, where beta 3 gets added to the slope of beta 2 if the year is beyond the breakpoint [@kaizer_segmented_regression]. Based on this idea, I set up my hypotheses: 
-
-#### Statistical hypothesis:
-
--   **Null hypothesis (H0):** One slope describes the effect of year on leaf coloration (slopes are the same before and after breakpoint)
-
-H0: $\beta_3 = 0$
-
--   **Alternative hypothesis (Ha):** Multiple slopes describe the effect of year on leaf coloration (slopes are different before and after breakpoint)
-
-Ha: $\beta_3 \neq 0$
-
-Before applying this model to my actual data, we can use a simplified model to simulate data from and better understand how a segmented model works:
-
-$$
-\text{BinaryOutcome} \sim \text{Binomial}(1, p)
-$$
-
 $$
 \text{logit}(p) =
 \beta_0 + \beta_1 \cdot \text{x} + \beta_2 \cdot \text{x} \cdot \text{afterbreakpoint}
 $$
-
 Where afterbreakpoint is a binary variable where 0 corresponds to before the determined breakpoint and 1 is after. This allows us to have the different slopes depending upon where we are along the x-axis. This difference in slopes is beta 2.
 
 We will use these steps:
@@ -384,7 +357,6 @@ seg_mod <- segmented(sim_mod_before, seg.Z = ~ x_before)
 ```
 
 4.  Check if the model's parameter estimates match selected parameters
-
 ```{r}
 #| code-fold: TRUE
 # 4. Check if model's parameters match 
@@ -404,15 +376,45 @@ colnames(comparison_table) <- c("Beta 0", "Beta 1", "Beta 2", "Breakpoint")
 kable(comparison_table, caption = "Coefficient Comparisons", align = "c") %>% 
   kable_styling(bootstrap_options = "striped")
 ```
+The Intercept (beta 0) was very close to the selected value of 0, and the x (beta 1) was very close to the selected value of 0.4. The x associated with being after the breakpoint (beta 2) was slightly lower than the selected value of 0.5. The model estimated a breakpoint of 11.43, which was similar to the selected value of 10.
 
-The Intercept (beta 0) was very close to the selected value of 0, and the x (beta 1) was very close to the selected value of 0.4. The x associated with being after the breakpoint (beta 2) was slightly lower than the selected value of 0.5.
+Now that we know how a segmented model works, I want to apply this model to my own data to look at the rate of change between the year curves and determine whether the doy at which the probability of having colored leaves increases shifts back at a faster rate after a certain year break point. To do this, we can describe our model in statistical notation:
+
+$$
+\text{BinaryOutcome} \sim \text{Binomial}(1, p)
+$$
+
+$$
+\text{logit}(p) =
+\beta_0 + \beta_1 \cdot \text{doy} + \beta_2 \cdot \text{year} + \beta_3 \cdot \text{year} \cdot \text{after} + \beta_4 \cdot \text{meanfall}
+$$
+
+$$
+\text{after}=
+\begin{cases}
+0 & \text{if year} \le \psi \\
+1 & \text{if year} > \psi
+\end{cases}
+$$
+
+A segmented model allows for a change in the relationship between response and explanatory variables at a breakpoint, where beta 3 gets added to the slope of beta 2 if the year is beyond the breakpoint [@kaizer_segmented_regression]. Based on this idea, I set up my hypotheses: 
+
+#### Statistical hypothesis:
+
+-   **Null hypothesis (H0):** One slope describes the effect of year on leaf coloration (slopes are the same before and after breakpoint)
+
+H0: $\beta_3 = 0$
+
+-   **Alternative hypothesis (Ha):** Multiple slopes describe the effect of year on leaf coloration (slopes are different before and after breakpoint)
+
+Ha: $\beta_3 \neq 0$
 
 ### 5. Inference
 
 Now, I want to apply a segmented model to my original logistic model at an estimated break point in 1980.
 
 ```{r}
-# Segmented model using initial binomial model
+# Segmented model using initial logistic model
 seg_model <- segmented(bin_model, seg.Z = ~year, psi = list(year = 1980))
 ```
 
