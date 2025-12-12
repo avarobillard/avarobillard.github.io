@@ -17,6 +17,7 @@ The Palisades and Eaton Fires occurred in early January 2025 in very populated a
 ![View of Topanga, CA during the Palisades fire; Kyle Grillot for the New York Times](fireimage.png){width="80%"}
 
 
+
 :::
 
 In this blog, we will walk through how to create a [false color image](https://earthobservatory.nasa.gov/features/FalseColor) using Landsat remote sensing and fire perimeter data to highlight the locations of the Palisades and Eaton Fires. We will also look at socioeconomic risk factors that could influence a community's response to a wildfire in the form of a [chloropleth map](https://en.wikipedia.org/wiki/Choropleth_map).
