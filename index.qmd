@@ -1,5 +1,5 @@
 ---
-title: "Ava Robillard"
+title: "AVA ROBILLARD"
 image: longer_headshot.jpg
 about:
   template: trestles
@@ -16,4 +16,24 @@ about:
       href: mailto:avarobillard@bren.ucsb.edu
 ---
 
-Hi! I'm Ava Robillard, and I am an early career data scientist. My background is in plant science and I am passionate about expanding this subject area to broader issues in sustainability with creative as well as organized data science approaches. When I’m not busy coding, you can usually find me out hiking, running, or reading.
+Hi! I'm Ava Robillard, and I am an early career **data scientist** with a background in **plant science**. I'm always striving to learn and create in my work, and I especially value the growth that comes from working at the intersection of biological and technical fields. When I’m not busy coding, you can usually find me outside in the sunshine, curating my Pinterest boards and Spotify playlists to perfection, or possibly adopting another plant.
+
+::: panel-tabset
+### Education
+
+**Master, Environmental Data Science** (Expected June 2026) \| Bren School of Environmental Science & Management \| University of California, Santa Barbara (UCSB)
+
+**Bachelor of Science, Plant Sciences, minor in Data Science** (May 2025) \| Cornell University, Ithaca NY 
+
+### Research Experience
+
+**Undergraduate Research Assistant** (2022-2025) \| Phylogenetics of Non-model Plant Species \| Specht Lab- Evolution of Plant Form and Function, Cornell University \| *Advisor: Jacob Landis, Ph.D.*
+
+**Herbarium Research Assistant** (2023-2025) \| Liberty Hyde Bailey Herbarium, Cornell University
+
+**Computational Biology REU Intern** (2024) \| Project: Spatio-temporal Analysis of Urban Heat Island Effect Using Remote Sensing, GIS, and Google Earth Engine
+
+### Professional Experience
+
+**Master's Capstone Project** (2026) \| Rincon's Bio Weaver Tool- From Disparate Data to Actionable Analysis \| *Clients: Rincon Consultants*
+:::

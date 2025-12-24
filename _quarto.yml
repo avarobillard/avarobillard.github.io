@@ -4,9 +4,10 @@ project:
 
 website:
   title: "Ava Robillard"
-  #favicon: images/favicon.png
+  favicon: images/favicon.png
   navbar:
-    #logo: images/logo.png
+    title: false
+    logo: images/logo2.png
     #logo-alt: insert description of logo
     right:
       - href: index.qmd
@@ -25,11 +26,11 @@ website:
 
 format:
   html:
-    #theme: styles.scss
-    theme: lux
+    theme: styles.scss
+    #theme: lux
     toc: true
     page-layout: full
-    #mainfont: Figtree
+    mainfont: Figtree
 
 
 

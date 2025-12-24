@@ -2,47 +2,37 @@
 
 // import google fonts
 @import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Libre+Caslon+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Libre+Caslon+Display&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
 
 // fonts 
 $figtree: "Figtree", sans-serif;
 $librecaslon: "Libre Caslon Display", serif;
+$nunito: "Nunito", sans-serif;
 
 // colors
-$color-1: #D1D7DA;
-$color-2: #BBD2E7;
+$color-1: #000000;
+$color-2: #ededed;
 $color-3: #B5A6AA;
-$color-4: #40515A;
-$color-5: #6B6056;
+$color-4: #FFFFFF;
+$color-5: #4A4748;
+$color-6: #660033;
 
 // define quarto variables
 $body-bg: $color-4;
 $navbar-bg: $color-2;
 $navbar-fg: $color-5;
-$navbar-hl: $color-4;
-$link-color: $color-4;
-$body-color: $color-1;
+$navbar-hl: $color-6;
+$link-color: $color-6;
+$body-color: $color-5;
 
 /*-- scss:rules --*/
 
-h1, h2, h3, h4{
-  font-family: $librecaslon;
+.navbar-brand img { 
+  max-height: 70px;
+  width: auto;
 }
 
-
-
-h1, h2 {
-  letter-spacing: 3px;
-  font-weight: 700;
-}
-
-.title {
-  color: pink;
-}
-
-.center-text{
-  text-align: center;
-}
-
-.orange-text {
-  color: lightpink;
+h1, h2, h3, h4, h5, h6 {
+  font-family: $nunito;
+  font-weight: 300;
 }
