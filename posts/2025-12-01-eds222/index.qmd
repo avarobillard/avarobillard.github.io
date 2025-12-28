@@ -1,8 +1,8 @@
 ---
-title: "EDS 222: Herbarium Specimen Phenology"
-description: "A statistical analysis of shifts in leaf color timing"
+title: "Herbarium Specimen Phenology"
+description: "Using logistic and segemented regression models to analyze shifts in leaf color timing"
 date: 2025-12-11
-categories: [MEDS, R]
+categories: [MEDS, R, Statistics]
 image: acer.png
 citation:
   url: https://avarobillard.github.io/posts/2025-12-01-eds222

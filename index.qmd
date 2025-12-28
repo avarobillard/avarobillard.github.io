@@ -16,7 +16,7 @@ about:
       href: mailto:avarobillard@bren.ucsb.edu
 ---
 
-Hi! I'm Ava Robillard, and I am an early career **data scientist** with a background in **plant science**. I'm always striving to learn and create in my work, and I especially value the growth that comes from working at the intersection of biological and technical fields. When I’m not busy coding, you can usually find me outside in the sunshine, curating my Pinterest boards and Spotify playlists to perfection, or possibly adopting another plant.
+Hi! I'm Ava, and an early career **data scientist** with a background in **plant science**. I'm always striving to learn and create in my work, and I especially value the growth that comes from working at the intersection of biological and technical fields. When I’m not busy coding, you can usually find me outside in the sunshine, curating my Pinterest boards and Spotify playlists to perfection, or possibly adopting another plant.
 
 ::: panel-tabset
 ### Education

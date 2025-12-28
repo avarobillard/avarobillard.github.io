@@ -1,9 +1,9 @@
 ---
-title: "EDS 220: Eaton and Palisades Fires"
-description: "An analysis covering false color imagery and social dimensions"
+title: "Los Angeles Wildfires: False Color Imagery & Socioeconomic Analysis"
+description: "Using remote sensing and EJI data to analyze the 2025 Eaton and Palisades Fires"
 date: 2025-12-01
-categories: [MEDS, Python]
-image: fire.png
+categories: [MEDS, Python, Geospatial]
+image: fireimage.png
 citation:
   url: https://avarobillard.github.io/posts/2025-12-01-eds220
 bibliography: references.bib
