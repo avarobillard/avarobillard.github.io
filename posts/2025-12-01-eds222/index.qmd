@@ -3,7 +3,7 @@ title: "Herbarium Specimen Phenology"
 description: "Using logistic and segemented regression models to analyze shifts in leaf color timing"
 date: 2025-12-11
 categories: [MEDS, R, Statistics]
-image: acer.png
+image: acer.jpeg
 citation:
   url: https://avarobillard.github.io/posts/2025-12-01-eds222
 bibliography: references.bib

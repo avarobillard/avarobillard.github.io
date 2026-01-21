@@ -16,7 +16,9 @@ about:
       href: mailto:avarobillard@bren.ucsb.edu
 ---
 
-Hi! I'm Ava, and an early career **data scientist** with a background in **plant science**. I'm always striving to learn and create in my work, and I especially value the growth that comes from working at the intersection of biological and technical fields. When I’m not busy coding, you can usually find me outside in the sunshine, curating my Pinterest boards and Spotify playlists to perfection, or possibly adopting another plant.
+Hi! I'm Ava, an early career **data scientist** with a background in **plant science**. Currently, I am pursuing a Master's in Environmental Data Science at the Bren School of Environmental Science & Management. I am building expertise in Python, geospatial analysis, machine learning, and data management, and am looking to apply these skills in creative, interdisciplinary projects. I'm always striving to learn and create in my work, and I especially value the growth that comes from working at the intersection of biological and technical fields. When I’m not busy coding, you can usually find me outside in the sunshine, curating my Pinterest boards and Spotify playlists to perfection, or possibly adopting another plant.
+
+Please **[check out my resume](Robillard_Ava_Resume.pdf){target="_blank"}** and explore my website to gain a fuller picture of my experience as an environmental data scientist! 
 
 ::: panel-tabset
 ### Education
