@@ -51,7 +51,7 @@ You can explore the [tree census data here](https://data.cityofnewyork.us/Enviro
 #| fig-align: "center"
 #| out-width: "100%"
 #| fig-alt: "Full infographic exploring street tree species distributions throughout New York City, including a map, stacked bar chart, and violin plot."
-knitr::include_graphics("infographicfinal.png")
+knitr::include_graphics("finalinfographic.png")
 ```
 
 Overall, my I found that there is a lot of variation in where tree species are within New York City, no matter how you subset the data. Looking at tree census data in this way can help organizations like NYC Parks determine what boroughs and societal groups might be lacking different tree species and help guide planting initiatives, with the goal of giving all people in the city access to the benefits of trees. 
