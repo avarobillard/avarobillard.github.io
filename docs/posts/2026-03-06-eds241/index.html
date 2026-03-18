@@ -107,7 +107,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<meta name="quarto:status" content="draft">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -144,7 +143,7 @@ window.Quarto = {
 <body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top quarto-banner"><div id="quarto-draft-alert" class="alert alert-warning"><i class="bi bi-pencil-square"></i>Draft</div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
@@ -257,24 +256,25 @@ window.Quarto = {
 </div>
 </div>
 <p>Reference: Greening Vacant Lots to Reduce Violent Crime: A Randomised Controlled Trial - Scientific Figure on ResearchGate.<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
-<p>In this blog post, we will replicate the Branas et al.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> study with simulated data to dive further into the causal claims.</p>
+<p>In this blog post, we will walk through a replication of the difference-in-differences analysis within the Branas et al.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> study, including looking into the study design and data, running statistical analyses, checking assumptions, and discussing causal inferences made about the benefits of urban greening. This will be done using simulated data, allowing us to focus largely on the study replication rather than data wrangling.</p>
 <hr>
 </section>
 <section id="data-description" class="level3">
 <h3 class="anchored" data-anchor-id="data-description">1. Data Description</h3>
 <section id="key-variables-and-data-structure" class="level4">
 <h4 class="anchored" data-anchor-id="key-variables-and-data-structure">Key variables and data structure</h4>
-<p>In this data, <strong>each row</strong> represents a vacant lot x year observation (i.e.&nbsp;L00001 x 2008). The <strong>unit of analysis</strong> of this study is vacant lot x year.</p>
+<p>In this data, <strong>each row</strong> represents a vacant lot-by-year observation (i.e.&nbsp;L00001 x 2008). The <strong>unit of analysis</strong> of this study is vacant-lot-by-year.</p>
 <p>The <strong>treatment variable</strong> represented vacant lots greened by the PHS program, during which there was a consistent treatment protocol of removing trash and debris, grading the land, planting grass and trees to create a park-like setting, and installing low wooden posts around each lot’s perimeter to show that this lot was cared for. PHS returned multiple times each year for basic maintenance.</p>
-<p>The <strong>control variable</strong> represented control lots from 2 eligibility pools were randomly selected and matched to treated lots at a 3:1 ratio by city section - vacant lots eligible to serve as controls included only those that had never been greened from 1999 to 2008 but could have been chosen by the PHS for greening.</p>
-<p>The <strong>outcome variables</strong> were various health and safety outcomes. Health outcomes include high stress, high cholesterol, high blood pressure, low exercise, poor health status. Safety outcomes include gun assaults, robberies, disorderly, and illegal dumping.</p>
+<p>The <strong>control variable</strong> represented control lots from 2 eligibility pools were randomly selected and matched to treated lots at a 3:1 ratio by city section - vacant lots eligible to serve as controls included only those that had never been greened from 1999 to 2008 but could have been chosen by the PHS for greening. A 3:1 ratio was used because at most 3 control lots per treated lot were available for random selection, without replacement, in all 4 sections of the city.</p>
+<p>The <strong>outcome variables</strong> were various health and safety outcomes. Health outcomes include high stress, high cholesterol, high blood pressure, low exercise, poor health status. Safety outcomes include gun assaults, robberies, disorderly conduct, and illegal dumping.</p>
 <p>Overall, the difference-in-differences approach considers these health and safety outcomes occurring on and around vacant lots in the PHS program before and after they were treated, as compared with matched control vacant lots over the same time period.</p>
 </section>
 <section id="notable-data-cleaning-decisions" class="level4">
 <h4 class="anchored" data-anchor-id="notable-data-cleaning-decisions">Notable data cleaning decisions</h4>
-<p>‘Point-based’ models where crimes (geocoded events) and health outcomes (survey-based) are converted into per-lot measurements using spatial methods (kernel density, inverse-distance weighting) and then modeled in DID regressions- in our simulated data, these outcomes are stored directly as continuous per-lot-per-year values.</p>
+<p>‘Point-based’ models where crimes (geocoded events) and health outcomes (survey-based) are converted into per-lot measurements using spatial methods (kernel density, inverse-distance weighting) and then modeled in difference-in-differences (DiD) regressions - in our simulated data, these outcomes are stored directly as continuous per-lot-per-year values.</p>
 <p>In the study, the health survey was conducted biennially while our simulated data contains annual values for this information.</p>
-<p>In terms of selecting the controls, there were initially two groups of randomly selected control lots as seen in Figure 1. The first pool limited eligible vacant lots to only those that had at least 1 open code violation. This control group was selected for the study’s final findings as these were a better statistical match to greened lots (in terms of area, age, and unemployment).</p>
+<p>In terms of selecting the controls, there were initially two groups of randomly selected control lots as seen in Figure 1. The first pool limited eligible vacant lots to only those that had at least 1 open code violation. The second pool limited eligibility to vacant lots that had at least some portion of their area within a 660-foot buffer of a recreation center, K-12 school, park, playground, or commercial corridor. The first pool control group was selected for the study’s final findings as these were a better statistical match to greened lots (in terms of area, age, and unemployment).</p>
+<p>The Northeast section was excluded because a trivial number of vacant lots (&lt;0.2%) were greened there.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -296,10 +296,11 @@ window.Quarto = {
 <h3 class="anchored" data-anchor-id="annotated-replication">2. Annotated Replication</h3>
 <section id="regression-model" class="level4">
 <h4 class="anchored" data-anchor-id="regression-model"><strong>Regression Model</strong></h4>
+<p>Branas et al.&nbsp;studied the effects of greening vacant lots on neighborhood health and safety outcomes in Philadelphia. The authors use a DiD regression framework to compare changes in outcomes over time between treated (greened) and control (not greened) lots. This method is appropriate because the greening intervention occurred at different locations and times rather than through random assignment. By comparing trends before and after treatment across both groups, the DiD approach helps isolate the causal impact of the greening program.</p>
 <div style="font-size: 0.85em;">
 <p><span class="math display">\[Y_{it}=\beta_{0}+\beta_1P_{it}+\beta_2R_{it}+\beta_3(P_{it}\times R_{it})+\beta_{4}(S_{it}\times t)+ \beta_{5}(S_{it}\times M_{i})+\displaystyle\sum_{k=6}^{p}\beta_{k}X_{it}+\xi_{i}+\varepsilon_{it}\]</span></p>
 </div>
-<p>Where each regression model included different health or safety outcome of interest, <span class="math inline">\(Yit\)</span>. <span class="math inline">\(it\)</span> is a unit of observation, or lot x year combination. The most key term here for our difference-in-differences analysis is <span class="math inline">\(\beta_{3}(P_{it}\times R_{it})\)</span>, which captures the additional change in outcomes for treated lots after greening relative to the pre-to-post change in control lots.</p>
+<p>Where each regression model included different health or safety outcome of interest, <span class="math inline">\(Yit\)</span>. <span class="math inline">\(it\)</span> is a unit of observation, or lot-by-year combination. The key term here for our difference-in-differences analysis is <span class="math inline">\(\beta_{3}(P_{it}\times R_{it})\)</span>, which captures the additional change in outcomes for treated lots after greening relative to the pre-to-post change in control lots.</p>
 <p>Before replicating this model, we need to take a deeper look at our data.</p>
 </section>
 <section id="how-well-is-our-data-matched" class="level4">
@@ -322,31 +323,62 @@ window.Quarto = {
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_min</span>(year, <span class="at">n =</span> <span class="dv">1</span>, <span class="at">with_ties =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the necessary column for the quick table</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>baseline_lot <span class="sc">%&gt;%</span></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(treated, area_sqft, median_age, unemployed_sqmi,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>         college_sqmi, income_sqmi, black_sqmi, hispanic_sqmi, </span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>         poverty_sqmi,vacant_lot_density) <span class="sc">%&gt;%</span></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(<span class="at">by =</span> treated, <span class="at">statistic =</span> <span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co"># baseline_lot %&gt;%</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   select(treated, area_sqft, median_age, unemployed_sqmi,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">#          college_sqmi, income_sqmi, black_sqmi, hispanic_sqmi, </span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">#          poverty_sqmi,vacant_lot_density) %&gt;%</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   tbl_summary(by = treated, statistic = all_continuous() ~ "{mean} ({sd})") %&gt;% </span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   modify_caption("**Matching Data**") %&gt;% </span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   modify_header(label ~ "**Variable**") %&gt;% </span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">#   modify_spanning_header(c("stat_1", "stat_2") ~ "**Treatment**")</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Select the necessary column for the quick table</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>baseline_lot <span class="sc">%&gt;%</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">treated =</span> <span class="fu">factor</span>(treated, </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>                          <span class="at">levels =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), </span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>                          <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"Control"</span>, <span class="st">"Treatment"</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(treated, area_sqft, median_age, unemployed_sqmi,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>         college_sqmi, income_sqmi, black_sqmi, hispanic_sqmi,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>         poverty_sqmi, vacant_lot_density) <span class="sc">%&gt;%</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tbl_summary</span>(<span class="at">by =</span> treated,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>              <span class="at">statistic =</span> <span class="fu">list</span>(<span class="fu">all_continuous</span>() <span class="sc">~</span> <span class="st">"{mean} ({sd})"</span>),</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>              <span class="at">label =</span> <span class="fu">list</span>(area_sqft <span class="sc">~</span> <span class="st">"Lot Area (sq ft)"</span>,</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>                           median_age <span class="sc">~</span> <span class="st">"Median Age"</span>,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                           unemployed_sqmi <span class="sc">~</span> <span class="st">"Unemployment Density"</span>,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>                           college_sqmi <span class="sc">~</span> <span class="st">"College Education Density"</span>,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>                           income_sqmi <span class="sc">~</span> <span class="st">"Median Household Income"</span>,</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>                           black_sqmi <span class="sc">~</span> <span class="st">"Black Population Density"</span>,</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>                           hispanic_sqmi <span class="sc">~</span> <span class="st">"Hispanic Population Density"</span>,</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>                           poverty_sqmi <span class="sc">~</span> <span class="st">"Poverty Density"</span>,</span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>                           vacant_lot_density <span class="sc">~</span> <span class="st">"Vacant Lot Density"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">modify_header</span>(label <span class="sc">~</span> <span class="st">"**Characteristics**"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_gt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Baseline Characteristics of Control and Treated Vacant Lots"</span>,</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Philadelphia Vacant Lot Sample Prior to Greening Intervention"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_spanner</span>(<span class="at">label =</span> <span class="st">"Study Groups"</span>,</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>              <span class="at">columns =</span> <span class="fu">c</span>(stat_1, stat_2)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_source_note</span>(<span class="at">source_note =</span> <span class="fu">md</span>(</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Note: Data include Philadelphia vacant lots from 1999–2008."</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="yexykcnozq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#yexykcnozq table {
+<div id="vemrtlhiqx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#vemrtlhiqx table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#yexykcnozq thead, #yexykcnozq tbody, #yexykcnozq tfoot, #yexykcnozq tr, #yexykcnozq td, #yexykcnozq th {
+#vemrtlhiqx thead, #vemrtlhiqx tbody, #vemrtlhiqx tfoot, #vemrtlhiqx tr, #vemrtlhiqx td, #vemrtlhiqx th {
   border-style: none;
 }
 
-#yexykcnozq p {
+#vemrtlhiqx p {
   margin: 0;
   padding: 0;
 }
 
-#yexykcnozq .gt_table {
+#vemrtlhiqx .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -372,12 +404,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_caption {
+#vemrtlhiqx .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#yexykcnozq .gt_title {
+#vemrtlhiqx .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -389,7 +421,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#yexykcnozq .gt_subtitle {
+#vemrtlhiqx .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -401,7 +433,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#yexykcnozq .gt_heading {
+#vemrtlhiqx .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -413,13 +445,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_bottom_border {
+#vemrtlhiqx .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_col_headings {
+#vemrtlhiqx .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -434,7 +466,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_col_heading {
+#vemrtlhiqx .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -454,7 +486,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#yexykcnozq .gt_column_spanner_outer {
+#vemrtlhiqx .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -466,15 +498,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#yexykcnozq .gt_column_spanner_outer:first-child {
+#vemrtlhiqx .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#yexykcnozq .gt_column_spanner_outer:last-child {
+#vemrtlhiqx .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#yexykcnozq .gt_column_spanner {
+#vemrtlhiqx .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -486,11 +518,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#yexykcnozq .gt_spanner_row {
+#vemrtlhiqx .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#yexykcnozq .gt_group_heading {
+#vemrtlhiqx .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -516,7 +548,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#yexykcnozq .gt_empty_group_heading {
+#vemrtlhiqx .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -531,15 +563,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#yexykcnozq .gt_from_md > :first-child {
+#vemrtlhiqx .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#yexykcnozq .gt_from_md > :last-child {
+#vemrtlhiqx .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#yexykcnozq .gt_row {
+#vemrtlhiqx .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -558,7 +590,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#yexykcnozq .gt_stub {
+#vemrtlhiqx .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -571,7 +603,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#yexykcnozq .gt_stub_row_group {
+#vemrtlhiqx .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -585,15 +617,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#yexykcnozq .gt_row_group_first td {
+#vemrtlhiqx .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#yexykcnozq .gt_row_group_first th {
+#vemrtlhiqx .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#yexykcnozq .gt_summary_row {
+#vemrtlhiqx .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -603,16 +635,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#yexykcnozq .gt_first_summary_row {
+#vemrtlhiqx .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_first_summary_row.thick {
+#vemrtlhiqx .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#yexykcnozq .gt_last_summary_row {
+#vemrtlhiqx .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -622,7 +654,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_grand_summary_row {
+#vemrtlhiqx .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -632,7 +664,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#yexykcnozq .gt_first_grand_summary_row {
+#vemrtlhiqx .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -642,7 +674,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_last_grand_summary_row_top {
+#vemrtlhiqx .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -652,11 +684,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_striped {
+#vemrtlhiqx .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#yexykcnozq .gt_table_body {
+#vemrtlhiqx .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -665,7 +697,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_footnotes {
+#vemrtlhiqx .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -679,7 +711,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_footnote {
+#vemrtlhiqx .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -688,7 +720,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#yexykcnozq .gt_sourcenotes {
+#vemrtlhiqx .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -702,7 +734,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#yexykcnozq .gt_sourcenote {
+#vemrtlhiqx .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -710,72 +742,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#yexykcnozq .gt_left {
+#vemrtlhiqx .gt_left {
   text-align: left;
 }
 
-#yexykcnozq .gt_center {
+#vemrtlhiqx .gt_center {
   text-align: center;
 }
 
-#yexykcnozq .gt_right {
+#vemrtlhiqx .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#yexykcnozq .gt_font_normal {
+#vemrtlhiqx .gt_font_normal {
   font-weight: normal;
 }
 
-#yexykcnozq .gt_font_bold {
+#vemrtlhiqx .gt_font_bold {
   font-weight: bold;
 }
 
-#yexykcnozq .gt_font_italic {
+#vemrtlhiqx .gt_font_italic {
   font-style: italic;
 }
 
-#yexykcnozq .gt_super {
+#vemrtlhiqx .gt_super {
   font-size: 65%;
 }
 
-#yexykcnozq .gt_footnote_marks {
+#vemrtlhiqx .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#yexykcnozq .gt_asterisk {
+#vemrtlhiqx .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#yexykcnozq .gt_indent_1 {
+#vemrtlhiqx .gt_indent_1 {
   text-indent: 5px;
 }
 
-#yexykcnozq .gt_indent_2 {
+#vemrtlhiqx .gt_indent_2 {
   text-indent: 10px;
 }
 
-#yexykcnozq .gt_indent_3 {
+#vemrtlhiqx .gt_indent_3 {
   text-indent: 15px;
 }
 
-#yexykcnozq .gt_indent_4 {
+#vemrtlhiqx .gt_indent_4 {
   text-indent: 20px;
 }
 
-#yexykcnozq .gt_indent_5 {
+#vemrtlhiqx .gt_indent_5 {
   text-indent: 25px;
 }
 
-#yexykcnozq .katex-display {
+#vemrtlhiqx .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#yexykcnozq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#vemrtlhiqx div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -787,63 +819,77 @@ window.Quarto = {
 <col style="width: 33%">
 </colgroup>
 <thead>
-<tr class="gt_col_headings header">
-<th id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristic</strong></th>
-<th id="stat_1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>0</strong><br>
+<tr class="gt_heading header">
+<td colspan="3" class="gt_heading gt_title gt_font_normal">Baseline Characteristics of Control and Treated Vacant Lots</td>
+</tr>
+<tr class="gt_heading even">
+<td colspan="3" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border">Philadelphia Vacant Lot Sample Prior to Greening Intervention</td>
+</tr>
+<tr class="gt_col_headings gt_spanner_row header">
+<th rowspan="2" id="label" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col"><strong>Characteristics</strong></th>
+<th colspan="2" id="Study Groups" class="gt_center gt_columns_top_border gt_column_spanner_outer" data-quarto-table-cell-role="th" scope="colgroup"><div class="gt_column_spanner">
+Study Groups
+</div></th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="stat_1" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Control</strong><br>
 N = 13,308<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-<th id="stat_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>1</strong><br>
+<th id="stat_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>Treatment</strong><br>
 N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
 </tr>
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">area_sqft</td>
+<td class="gt_row gt_left" headers="label">Lot Area (sq ft)</td>
 <td class="gt_row gt_center" headers="stat_1">1,258 (771)</td>
 <td class="gt_row gt_center" headers="stat_2">1,271 (795)</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">median_age</td>
+<td class="gt_row gt_left" headers="label">Median Age</td>
 <td class="gt_row gt_center" headers="stat_1">36.4 (5.1)</td>
 <td class="gt_row gt_center" headers="stat_2">35.8 (5.1)</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">unemployed_sqmi</td>
+<td class="gt_row gt_left" headers="label">Unemployment Density</td>
 <td class="gt_row gt_center" headers="stat_1">24 (17)</td>
 <td class="gt_row gt_center" headers="stat_2">25 (19)</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">college_sqmi</td>
+<td class="gt_row gt_left" headers="label">College Education Density</td>
 <td class="gt_row gt_center" headers="stat_1">111 (79)</td>
 <td class="gt_row gt_center" headers="stat_2">82 (61)</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">income_sqmi</td>
+<td class="gt_row gt_left" headers="label">Median Household Income</td>
 <td class="gt_row gt_center" headers="stat_1">21,258 (8,015)</td>
 <td class="gt_row gt_center" headers="stat_2">19,422 (7,094)</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">black_sqmi</td>
+<td class="gt_row gt_left" headers="label">Black Population Density</td>
 <td class="gt_row gt_center" headers="stat_1">579 (466)</td>
 <td class="gt_row gt_center" headers="stat_2">580 (490)</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">hispanic_sqmi</td>
+<td class="gt_row gt_left" headers="label">Hispanic Population Density</td>
 <td class="gt_row gt_center" headers="stat_1">71 (127)</td>
 <td class="gt_row gt_center" headers="stat_2">78 (142)</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_left" headers="label">poverty_sqmi</td>
+<td class="gt_row gt_left" headers="label">Poverty Density</td>
 <td class="gt_row gt_center" headers="stat_1">375 (244)</td>
 <td class="gt_row gt_center" headers="stat_2">359 (239)</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_left" headers="label">vacant_lot_density</td>
+<td class="gt_row gt_left" headers="label">Vacant Lot Density</td>
 <td class="gt_row gt_center" headers="stat_1">1.25 (0.76)</td>
 <td class="gt_row gt_center" headers="stat_2">1.25 (0.77)</td>
 </tr>
 </tbody><tfoot>
 <tr class="gt_footnotes odd">
 <td colspan="3" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> Mean (SD)</td>
+</tr>
+<tr class="gt_sourcenotes even">
+<td colspan="3" class="gt_sourcenote">Note: Data include Philadelphia vacant lots from 1999–2008.</td>
 </tr>
 </tfoot>
 
@@ -852,7 +898,8 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 </div>
 </div>
 </div>
-<p>One of the key assumptions of a difference-in-differences analysis is parallel trends between the treatment and control groups during the pre-treatment period. This allows us to have a true causal estimate of any effect that greening vacant lots have on the various health and safety outcomes.</p>
+<p>The following table is a baseline lot, and neighborhood characteristics are measured prior to treatment. The study uses Philadelphia vacant lots from 1999–2008, with treated lots greened through the Pennsylvania Horticultural Society program and control lots drawn from eligible untreated vacant lots.</p>
+<p>One key assumption of a difference-in-differences analysis is that the treatment and control groups exhibit parallel trends in the pre-treatment period. If this assumption holds, the difference in post-treatment changes between the two groups can be interpreted as the causal effect of the greening intervention on the outcomes of interest.</p>
 <p>Let’s take a look at the trends throughout the study period our different outcome variables!</p>
 </section>
 <section id="parallel-trends-assumption" class="level4">
@@ -899,25 +946,29 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> treat_year, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
 <span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"#6F4E37"</span>, <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"#50C878"</span>),</span>
 <span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"Control"</span>, <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Treated"</span>)) <span class="sc">+</span></span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>outcome, <span class="at">scales =</span> <span class="st">"free_y"</span>,</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>             <span class="at">labeller =</span> <span class="fu">as_labeller</span>(facet_names)) <span class="sc">+</span></span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Group"</span>,</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Mean outcome"</span>,</span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Difference-in-Differences across outcomes"</span>,</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dashed line = average greening year among treated lots"</span>) <span class="sc">+</span></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">2000</span>, <span class="dv">2004</span>, <span class="dv">2008</span>)) <span class="sc">+</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>outcome, <span class="at">scales =</span> <span class="st">"free_y"</span>,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>             <span class="at">ncol =</span> <span class="dv">2</span>,</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>             <span class="at">labeller =</span> <span class="fu">as_labeller</span>(facet_names),</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>             <span class="at">axes =</span> <span class="st">"margins"</span>,</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>             <span class="at">axis.labels =</span> <span class="st">"margins"</span>) <span class="sc">+</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Group"</span>,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Year"</span>,</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Mean Outcome"</span>,</span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Pre- and Post-Greening Outcome Trends"</span>,</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dashed line = Average Greening Year in Treated Lots"</span>) <span class="sc">+</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Mean outcome trends for treated and control lots over time. The dashed line indicates the average greening year; pre-treatment trends are used to assess the parallel trends assumption.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>It appears that some outcome variables meet the parallel trends assumption better than others, so we will select one health and one safety outcome that appears to have the best parallel trends pre-treatment.</p>
+<p>The figure above presents pre- and post-treatment trends for all outcomes and allows us to assess the parallel trends assumption using approximately five pre-treatment periods (1999–2004). Among safety outcomes, gun assaults appear to best satisfy the parallel trends assumption, as both treated and control groups follow a similar downward trajectory prior to greening, whereas outcomes such as disorderly conduct and vandalism show more divergence or fluctuation between groups before treatment, suggesting potential violations. Among health outcomes, <em>high cholesterol</em> shows relatively parallel pre-treatment trends, with both groups increasing at a similar rate, whereas <em>high stress</em> and <em>low exercise</em> show noticeable differences in trends prior to treatment. Overall, <em>gun assaults</em> and <em>high cholesterol</em> show the most consistent pre-treatment patterns and are therefore the most appropriate outcomes for the DiD analysis.</p>
 </section>
 <section id="selected-outcomes-for-models" class="level4">
 <h4 class="anchored" data-anchor-id="selected-outcomes-for-models">Selected outcomes for models</h4>
@@ -943,29 +994,31 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
 <span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">1.8</span>) <span class="sc">+</span></span>
 <span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> treat_year, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> outcome, <span class="at">scales =</span> <span class="st">"free_y"</span>,</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>outcome, <span class="at">scales =</span> <span class="st">"free_y"</span>,</span>
 <span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>             <span class="at">labeller =</span> <span class="fu">as_labeller</span>(facet_names)) <span class="sc">+</span></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"#6F4E37"</span>, <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"#50C878"</span>),</span>
 <span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>                   <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"0"</span> <span class="ot">=</span> <span class="st">"Control"</span>, <span class="st">"1"</span> <span class="ot">=</span> <span class="st">"Treated"</span>)) <span class="sc">+</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Treated"</span>, <span class="at">y =</span> <span class="st">"Mean outcome"</span>,</span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Difference-in-Differences Mean Trends"</span>,</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">"Treated"</span>, <span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"Mean Outcome"</span>,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Pre- and Post-Treatment Trends in Gun Assaults and High Cholesterol"</span>,</span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Dashed line = Average Greening Year in Treated Lots"</span>) <span class="sc">+</span></span>
 <span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div>
+<div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="index_files/figure-html/selected-outcomes-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>The figure shows raw mean outcomes for treated and control lots over time. Although the dashed line highlights the average treatment timing, other city-wide factors may also change over time. The difference-in-differences regression accounts for these common time trends when estimating the treatment effect.</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>Now that we have analyzed the parallel trends assumption for our outcome variables, gun assaults and high cholesterol, let’s run some models!</p>
+<p>Now that we have visually analyzed the parallel trends assumption for our outcome variables, gun assaults and high cholesterol, let’s run some models!</p>
 </section>
 <section id="regression-to-estimate-treatment-effect" class="level4">
 <h4 class="anchored" data-anchor-id="regression-to-estimate-treatment-effect">Regression to estimate treatment effect</h4>
-<p>Let’s use the <code>fixest</code> package to run a model with i(), a syntax for including a period, treatment, and reference in a DiD.</p>
-<p>Here, i(rel_year, treated_status, ref = -1) creates an interaction between treatment status and each year relative to greening, producing a separate coefficient for each year. The year before greening (rel_year = -1) is excluded as the reference period.</p>
+<p>Let’s use the <code>{fixest}</code> package to run a model with <code>i()</code>, a syntax for including a period, treatment, and reference in a DiD.</p>
+<p>Here, <code>i(rel_year, treated_status, ref = -1)</code> creates an interaction between treatment status and each year relative to greening, producing a separate coefficient for each year. The year before greening (<code>rel_year = -1</code>) is excluded as the reference period.</p>
+<p>In addition to the treatment indicators, we include several covariates to control for observable differences across vacant lots and neighborhoods. These include <em>lot characteristics</em>, such as lot area and local vacant lot density, as well as baseline <em>neighborhood characteristics</em>, including unemployment, education, income, racial composition, poverty, and median age. We also include an interaction between section and pre-treatment mean outcomes to account for baseline differences across locations, and section-by-year fixed effects to control for time-varying shocks common within each city section. Standard errors are clustered at the contiguous lot group level to account for spatial correlation.</p>
 <p>Let’s do our safety outcome first.</p>
 <div class="cell">
 <details class="code-fold">
@@ -994,7 +1047,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 </div>
 </div>
 </div>
-<p>This plot supports the parallel trends assumption, showing similar pre-treatment trends between treated and control lots before greening, followed by a clear reduction in gun assaults immediately after treatment.</p>
+<p>The figure above presents the <em>event-study</em> estimates from the DiD model, where each coefficient represents the estimated effect of greening on <em>gun assaults</em> relative to the year immediately before treatment. The pre-treatment coefficients are close to zero and relatively stable, supporting the parallel trends assumption. Following greening, the coefficients become negative and statistically significant, indicating a reduction in <em>gun assaults</em> in treated lots relative to control lots. This pattern suggests that the greening intervention is associated with a decline in <em>gun assaults</em> after implementation.</p>
 <p>Next, let’s look at our health outcome.</p>
 <div class="cell">
 <details class="code-fold">
@@ -1023,7 +1076,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 </div>
 </div>
 </div>
-<p>This plot shows a slightly less consistent trend pre-treatment and a less clear reduction in high cholesterol post-treatment.</p>
+<p>The figure above presents the <em>event-study</em> estimates for <em>high cholesterol</em> from the DiD model, with each coefficient interpreted relative to the pre-treatment period. The pre-treatment coefficients are generally small and stable, providing some support for the parallel trends assumption, although they exhibit slightly more variation than the safety outcome. After treatment, the coefficients do not show a clear or consistent pattern, and most estimates are imprecise, suggesting no strong evidence of a systematic greening effect on <em>high cholesterol</em>.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -1034,7 +1087,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<p>Now, let’s run some models just using an interaction term (post:treated) and look at our key term from the study’s model, <span class="math inline">\(\beta_{3}(P_{it}\times R_{it})\)</span>, as this captures the additional change in outcomes for treated lots after greening relative to the pre-to-post change in control lots.</p>
+<p>Now, let’s run some models just using an interaction term (post:treated) and look at our key term from the study’s model, <span class="math inline">\(\beta_{3}(P_{it}\times R_{it})\)</span>, as this captures the additional change in outcomes for treated lots after greening relative to the pre-to-post change in control lots. While the previous models were beneficial for testing parallel trends over the years of the study and showing the treatment effect of greening over time, the standard interaction term provides a single, interpretable number to report and compare to the study’s table of results.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create model based on equation - selected safety outcome</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>safety_model <span class="ot">&lt;-</span> <span class="fu">feols</span>(</span>
@@ -1055,31 +1108,32 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(safety_model) <span class="sc">%&gt;%</span> </span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">"post:treated_status"</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gt</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">term =</span> <span class="st">"Term"</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">estimate =</span> <span class="st">"Estimate"</span>,</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">std.error =</span> <span class="st">"Std. Error"</span>,</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">statistic =</span> <span class="st">"t-value"</span>,</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">p.value =</span> <span class="st">"p-value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"DiD Estimate: Gun Assaults"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">term =</span> <span class="st">"Term"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">estimate =</span> <span class="st">"Estimate"</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">std.error =</span> <span class="st">"Std. Error"</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">statistic =</span> <span class="st">"t-value"</span>,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">p.value =</span> <span class="st">"p-value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="kckpdjcwjt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kckpdjcwjt table {
+<div id="ycdlihidxl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#ycdlihidxl table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kckpdjcwjt thead, #kckpdjcwjt tbody, #kckpdjcwjt tfoot, #kckpdjcwjt tr, #kckpdjcwjt td, #kckpdjcwjt th {
+#ycdlihidxl thead, #ycdlihidxl tbody, #ycdlihidxl tfoot, #ycdlihidxl tr, #ycdlihidxl td, #ycdlihidxl th {
   border-style: none;
 }
 
-#kckpdjcwjt p {
+#ycdlihidxl p {
   margin: 0;
   padding: 0;
 }
 
-#kckpdjcwjt .gt_table {
+#ycdlihidxl .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1105,12 +1159,12 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-left-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_caption {
+#ycdlihidxl .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kckpdjcwjt .gt_title {
+#ycdlihidxl .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1122,7 +1176,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-bottom-width: 0;
 }
 
-#kckpdjcwjt .gt_subtitle {
+#ycdlihidxl .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1134,7 +1188,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-top-width: 0;
 }
 
-#kckpdjcwjt .gt_heading {
+#ycdlihidxl .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1146,13 +1200,13 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-right-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_bottom_border {
+#ycdlihidxl .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_col_headings {
+#ycdlihidxl .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1167,7 +1221,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-right-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_col_heading {
+#ycdlihidxl .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1187,7 +1241,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   overflow-x: hidden;
 }
 
-#kckpdjcwjt .gt_column_spanner_outer {
+#ycdlihidxl .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1199,15 +1253,15 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 4px;
 }
 
-#kckpdjcwjt .gt_column_spanner_outer:first-child {
+#ycdlihidxl .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kckpdjcwjt .gt_column_spanner_outer:last-child {
+#ycdlihidxl .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kckpdjcwjt .gt_column_spanner {
+#ycdlihidxl .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1219,11 +1273,11 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   width: 100%;
 }
 
-#kckpdjcwjt .gt_spanner_row {
+#ycdlihidxl .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kckpdjcwjt .gt_group_heading {
+#ycdlihidxl .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1249,7 +1303,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   text-align: left;
 }
 
-#kckpdjcwjt .gt_empty_group_heading {
+#ycdlihidxl .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1264,15 +1318,15 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   vertical-align: middle;
 }
 
-#kckpdjcwjt .gt_from_md > :first-child {
+#ycdlihidxl .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kckpdjcwjt .gt_from_md > :last-child {
+#ycdlihidxl .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kckpdjcwjt .gt_row {
+#ycdlihidxl .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1291,7 +1345,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   overflow-x: hidden;
 }
 
-#kckpdjcwjt .gt_stub {
+#ycdlihidxl .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1304,7 +1358,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#kckpdjcwjt .gt_stub_row_group {
+#ycdlihidxl .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1318,15 +1372,15 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   vertical-align: top;
 }
 
-#kckpdjcwjt .gt_row_group_first td {
+#ycdlihidxl .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kckpdjcwjt .gt_row_group_first th {
+#ycdlihidxl .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kckpdjcwjt .gt_summary_row {
+#ycdlihidxl .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1336,16 +1390,16 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#kckpdjcwjt .gt_first_summary_row {
+#ycdlihidxl .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_first_summary_row.thick {
+#ycdlihidxl .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kckpdjcwjt .gt_last_summary_row {
+#ycdlihidxl .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1355,7 +1409,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-bottom-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_grand_summary_row {
+#ycdlihidxl .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1365,7 +1419,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#kckpdjcwjt .gt_first_grand_summary_row {
+#ycdlihidxl .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1375,7 +1429,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-top-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_last_grand_summary_row_top {
+#ycdlihidxl .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1385,11 +1439,11 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-bottom-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_striped {
+#ycdlihidxl .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kckpdjcwjt .gt_table_body {
+#ycdlihidxl .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1398,7 +1452,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-bottom-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_footnotes {
+#ycdlihidxl .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1412,7 +1466,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-right-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_footnote {
+#ycdlihidxl .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1421,7 +1475,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#kckpdjcwjt .gt_sourcenotes {
+#ycdlihidxl .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1435,7 +1489,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-right-color: #D3D3D3;
 }
 
-#kckpdjcwjt .gt_sourcenote {
+#ycdlihidxl .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1443,79 +1497,82 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#kckpdjcwjt .gt_left {
+#ycdlihidxl .gt_left {
   text-align: left;
 }
 
-#kckpdjcwjt .gt_center {
+#ycdlihidxl .gt_center {
   text-align: center;
 }
 
-#kckpdjcwjt .gt_right {
+#ycdlihidxl .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kckpdjcwjt .gt_font_normal {
+#ycdlihidxl .gt_font_normal {
   font-weight: normal;
 }
 
-#kckpdjcwjt .gt_font_bold {
+#ycdlihidxl .gt_font_bold {
   font-weight: bold;
 }
 
-#kckpdjcwjt .gt_font_italic {
+#ycdlihidxl .gt_font_italic {
   font-style: italic;
 }
 
-#kckpdjcwjt .gt_super {
+#ycdlihidxl .gt_super {
   font-size: 65%;
 }
 
-#kckpdjcwjt .gt_footnote_marks {
+#ycdlihidxl .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kckpdjcwjt .gt_asterisk {
+#ycdlihidxl .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kckpdjcwjt .gt_indent_1 {
+#ycdlihidxl .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kckpdjcwjt .gt_indent_2 {
+#ycdlihidxl .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kckpdjcwjt .gt_indent_3 {
+#ycdlihidxl .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kckpdjcwjt .gt_indent_4 {
+#ycdlihidxl .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kckpdjcwjt .gt_indent_5 {
+#ycdlihidxl .gt_indent_5 {
   text-indent: 25px;
 }
 
-#kckpdjcwjt .katex-display {
+#ycdlihidxl .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#kckpdjcwjt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#ycdlihidxl div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_col_headings header">
+<tr class="gt_heading header">
+<td colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border">DiD Estimate: Gun Assaults</td>
+</tr>
+<tr class="gt_col_headings even">
 <th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Term</th>
 <th id="estimate" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Estimate</th>
 <th id="std.error" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Std. Error</th>
@@ -1557,31 +1614,32 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(health_model) <span class="sc">%&gt;%</span> </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(term <span class="sc">==</span> <span class="st">"post:treated_status"</span>) <span class="sc">%&gt;%</span>  </span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gt</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">term =</span> <span class="st">"Term"</span>,</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">estimate =</span> <span class="st">"Estimate"</span>,</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">std.error =</span> <span class="st">"Std. Error"</span>,</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">statistic =</span> <span class="st">"t-value"</span>,</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">p.value =</span> <span class="st">"p-value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"DiD Estimate: High Cholesterol"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fmt_number</span>(<span class="at">decimals =</span> <span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">term =</span> <span class="st">"Term"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">estimate =</span> <span class="st">"Estimate"</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">std.error =</span> <span class="st">"Std. Error"</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>             <span class="at">statistic =</span> <span class="st">"t-value"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">p.value =</span> <span class="st">"p-value"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 <div class="cell-output-display">
-<div id="ffnfdbhcpq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ffnfdbhcpq table {
+<div id="jctnxildtw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jctnxildtw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ffnfdbhcpq thead, #ffnfdbhcpq tbody, #ffnfdbhcpq tfoot, #ffnfdbhcpq tr, #ffnfdbhcpq td, #ffnfdbhcpq th {
+#jctnxildtw thead, #jctnxildtw tbody, #jctnxildtw tfoot, #jctnxildtw tr, #jctnxildtw td, #jctnxildtw th {
   border-style: none;
 }
 
-#ffnfdbhcpq p {
+#jctnxildtw p {
   margin: 0;
   padding: 0;
 }
 
-#ffnfdbhcpq .gt_table {
+#jctnxildtw .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1607,12 +1665,12 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-left-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_caption {
+#jctnxildtw .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ffnfdbhcpq .gt_title {
+#jctnxildtw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1624,7 +1682,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-bottom-width: 0;
 }
 
-#ffnfdbhcpq .gt_subtitle {
+#jctnxildtw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1636,7 +1694,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-top-width: 0;
 }
 
-#ffnfdbhcpq .gt_heading {
+#jctnxildtw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1648,13 +1706,13 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-right-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_bottom_border {
+#jctnxildtw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_col_headings {
+#jctnxildtw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1669,7 +1727,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-right-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_col_heading {
+#jctnxildtw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1689,7 +1747,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   overflow-x: hidden;
 }
 
-#ffnfdbhcpq .gt_column_spanner_outer {
+#jctnxildtw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1701,15 +1759,15 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 4px;
 }
 
-#ffnfdbhcpq .gt_column_spanner_outer:first-child {
+#jctnxildtw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ffnfdbhcpq .gt_column_spanner_outer:last-child {
+#jctnxildtw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ffnfdbhcpq .gt_column_spanner {
+#jctnxildtw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1721,11 +1779,11 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   width: 100%;
 }
 
-#ffnfdbhcpq .gt_spanner_row {
+#jctnxildtw .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ffnfdbhcpq .gt_group_heading {
+#jctnxildtw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1751,7 +1809,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   text-align: left;
 }
 
-#ffnfdbhcpq .gt_empty_group_heading {
+#jctnxildtw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1766,15 +1824,15 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   vertical-align: middle;
 }
 
-#ffnfdbhcpq .gt_from_md > :first-child {
+#jctnxildtw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ffnfdbhcpq .gt_from_md > :last-child {
+#jctnxildtw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ffnfdbhcpq .gt_row {
+#jctnxildtw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1793,7 +1851,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   overflow-x: hidden;
 }
 
-#ffnfdbhcpq .gt_stub {
+#jctnxildtw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1806,7 +1864,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#ffnfdbhcpq .gt_stub_row_group {
+#jctnxildtw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1820,15 +1878,15 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   vertical-align: top;
 }
 
-#ffnfdbhcpq .gt_row_group_first td {
+#jctnxildtw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ffnfdbhcpq .gt_row_group_first th {
+#jctnxildtw .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ffnfdbhcpq .gt_summary_row {
+#jctnxildtw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1838,16 +1896,16 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#ffnfdbhcpq .gt_first_summary_row {
+#jctnxildtw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_first_summary_row.thick {
+#jctnxildtw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ffnfdbhcpq .gt_last_summary_row {
+#jctnxildtw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1857,7 +1915,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-bottom-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_grand_summary_row {
+#jctnxildtw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1867,7 +1925,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#ffnfdbhcpq .gt_first_grand_summary_row {
+#jctnxildtw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1877,7 +1935,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-top-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_last_grand_summary_row_top {
+#jctnxildtw .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1887,11 +1945,11 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-bottom-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_striped {
+#jctnxildtw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ffnfdbhcpq .gt_table_body {
+#jctnxildtw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1900,7 +1958,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-bottom-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_footnotes {
+#jctnxildtw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1914,7 +1972,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-right-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_footnote {
+#jctnxildtw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1923,7 +1981,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#ffnfdbhcpq .gt_sourcenotes {
+#jctnxildtw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1937,7 +1995,7 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   border-right-color: #D3D3D3;
 }
 
-#ffnfdbhcpq .gt_sourcenote {
+#jctnxildtw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1945,79 +2003,82 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
   padding-right: 5px;
 }
 
-#ffnfdbhcpq .gt_left {
+#jctnxildtw .gt_left {
   text-align: left;
 }
 
-#ffnfdbhcpq .gt_center {
+#jctnxildtw .gt_center {
   text-align: center;
 }
 
-#ffnfdbhcpq .gt_right {
+#jctnxildtw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ffnfdbhcpq .gt_font_normal {
+#jctnxildtw .gt_font_normal {
   font-weight: normal;
 }
 
-#ffnfdbhcpq .gt_font_bold {
+#jctnxildtw .gt_font_bold {
   font-weight: bold;
 }
 
-#ffnfdbhcpq .gt_font_italic {
+#jctnxildtw .gt_font_italic {
   font-style: italic;
 }
 
-#ffnfdbhcpq .gt_super {
+#jctnxildtw .gt_super {
   font-size: 65%;
 }
 
-#ffnfdbhcpq .gt_footnote_marks {
+#jctnxildtw .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ffnfdbhcpq .gt_asterisk {
+#jctnxildtw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ffnfdbhcpq .gt_indent_1 {
+#jctnxildtw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ffnfdbhcpq .gt_indent_2 {
+#jctnxildtw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ffnfdbhcpq .gt_indent_3 {
+#jctnxildtw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ffnfdbhcpq .gt_indent_4 {
+#jctnxildtw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ffnfdbhcpq .gt_indent_5 {
+#jctnxildtw .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ffnfdbhcpq .katex-display {
+#jctnxildtw .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ffnfdbhcpq div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#jctnxildtw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
 
 <table class="gt_table caption-top table table-sm table-striped small" data-quarto-bootstrap="false">
 <thead>
-<tr class="gt_col_headings header">
+<tr class="gt_heading header">
+<td colspan="5" class="gt_heading gt_title gt_font_normal gt_bottom_border">DiD Estimate: High Cholesterol</td>
+</tr>
+<tr class="gt_col_headings even">
 <th id="term" class="gt_col_heading gt_columns_bottom_border gt_left" data-quarto-table-cell-role="th" scope="col">Term</th>
 <th id="estimate" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Estimate</th>
 <th id="std.error" class="gt_col_heading gt_columns_bottom_border gt_right" data-quarto-table-cell-role="th" scope="col">Std. Error</th>
@@ -2039,43 +2100,93 @@ N = 4,436<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 </div>
 </div>
 </div>
-<p>Our model output for the gun assaults outcome (-7.661) was significant and similar to the study findings for all 4 sections of Philadelphia (-7.90). Our model output for high cholesterol (0.061) was lower than the study findings (0.76), and insignificant. The study discussed these outcomes, stating that gun assaults were significantly reduced citywide after the greening treatment. They state that the consistent increase in high cholesterol related to the greening of vacant lots was surprising and runs counter to prior work.</p>
+<p>Our model output for the gun assaults outcome (-7.661) was significant, suggesting that after greening, treated lots experienced approximately 7.7 fewer gun assaults per square mile per year compared to control lots relative to the pre-treatment period. This was similar to the study findings for all 4 sections of Philadelphia (-7.90). Our model output for high cholesterol (0.061) was insignificant and lower than the study findings (0.76), possibly due to the limitations of replicating the health survey in the simulated data. The study discussed these outcomes, stating that gun assaults were significantly reduced citywide after the greening treatment and that the consistent increase in high cholesterol related to the greening of vacant lots was surprising and runs counter to prior work.</p>
 </section>
 </section>
 <section id="critical-evaluation" class="level3">
 <h3 class="anchored" data-anchor-id="critical-evaluation">3. Critical Evaluation</h3>
-<p>After running our models, we will reflect on our findings in the context of the study design.</p>
-<section id="causal-identification-is-the-identification-strategy-credible-what-would-have-to-be-true-for-the-estimates-to-be-causal" class="level4">
-<h4 class="anchored" data-anchor-id="causal-identification-is-the-identification-strategy-credible-what-would-have-to-be-true-for-the-estimates-to-be-causal">Causal identification: Is the identification strategy credible? What would have to be true for the estimates to be causal?</h4>
-<p>The study and its replication indicate that the causal relationship appears reasonably credible overall. However, some measurements show less parallelism and lack significant statistical relevance in the post-treatment phase.</p>
-<p>The author also breaks down the analysis by regions in Philadelphia, revealing that some areas and categories seem to be more effective than others. This likely reflects local characteristics of the urban environment, such as neighborhood structure, density, and how residents actually use the greened spaces.</p>
-<p>In the results, crime outcomes appear stronger and more consistent, while health outcomes are relatively weaker. This makes sense, as health is influenced by many factors beyond the intervention. The study suggests that greening can clearly reduce crime, while the evidence for health improvements is less compelling.</p>
-<p>Some outcomes are more challenging to interpret. For instance, reports of disorderly incidents increase before treatment and even more after treatment. One possibility is that greening attracts more people to the area, leading to increased foot traffic and consequently more reported disorder, even if serious crime decreases. Meanwhile, outcomes related to low exercise seem to show more improvement.</p>
+<section id="a.-causal-identification" class="level4">
+<h4 class="anchored" data-anchor-id="a.-causal-identification">A. Causal Identification</h4>
+<p>This study presents a partially credible identification strategy, with several important caveats.</p>
+<p>The study uses a matched Difference-in-Differences (DID) design comparing treated vacant lots to matched untreated lots over time. Identification relies on both temporal variation (pre vs.&nbsp;post greening) and cross-sectional variation (treated vs.&nbsp;control lots). However, a formal statistical pre-trend test was not conducted, which weakens the empirical support for the parallel trends assumption.</p>
+<p>The design is more convincing for crime outcomes than for health outcomes. Crime data come from administrative records measured annually at a fine spatial resolution, which aligns well with the DID framework. In contrast, health outcomes rely on modeled survey aggregates derived from biennial surveys. This creates potential timing misalignment between treatment exposure and outcome measurement and introduces additional measurement noise, weakening causal interpretation.</p>
+<p>A key strength is the matching of treated lots to eligible but untreated parcels, which improves comparability and reduces observable selection bias. However, treatment assignment remains quasi-experimental rather than random. Lot selection may still reflect unobserved neighborhood dynamics such as community capacity, redevelopment pressure, baseline safety trends, or political prioritization.</p>
+<p>The one-to-one matching design improves internal comparability but also implies that estimates depend heavily on the quality of the matching procedure. If important unobserved differences remain between matched pairs, DID estimates may still reflect residual selection bias rather than purely treatment effects.</p>
+<p><strong>Overall Assessment</strong></p>
+<p>Overall, the identification strategy is moderately credible for crime outcomes, with strong outcome measurement and spatial timing that aligns well with the treatment. The causal interpretation is less convincing for health outcomes, where measurement limitations, timing misalignment, and potential residual selection bias introduce greater uncertainty.</p>
 </section>
-<section id="statistical-assumptions-are-key-assumptions-tested-or-defended-do-you-find-the-evidence-convincing" class="level4">
-<h4 class="anchored" data-anchor-id="statistical-assumptions-are-key-assumptions-tested-or-defended-do-you-find-the-evidence-convincing">Statistical assumptions: Are key assumptions tested or defended? Do you find the evidence convincing?</h4>
-<p>We observed that some pre-trends are slightly off, particularly in areas such as vandalism, disorderly conduct, and poor health.</p>
-<p>However, Our replicated trends mostly show parallel patterns for gun assaults, cholesterol levels, and several other outcomes. The event-study replication assesses the parallel trends assumption by checking whether treated and control areas had similar trends before the treatment took place.</p>
-<p>Overall, the evidence supporting the statistical assumptions is generally convincing, for them mostly fits the assumptions of parallel trends.</p>
+<section id="b.-assumptions" class="level4">
+<h4 class="anchored" data-anchor-id="b.-assumptions">B. Assumptions</h4>
+<p>Usually, the assumptions of DID include:</p>
+<ul>
+<li>parallel trends between the treated and control groups</li>
+<li>exogeneity of treatment assignment</li>
+<li>no spillovers (SUTVA)</li>
+<li>correct model specification</li>
+</ul>
+<p>They are discussed as follows:</p>
+<p><em>Parallel Trends</em></p>
+<p>The DID framework requires that the treated and control lots follow similar pre-treatment trends.</p>
+<p>The paper presents descriptive pre-period comparisons but does not conduct a formal statistical pre-trend test (e.g., an event-study or a joint significance test of pre-treatment coefficients). While crime outcomes appear visually consistent with parallel trends, health outcomes show greater variability and weaker support for this assumption.</p>
+<p>A stronger design would test parallel trends within each Philadelphia section and for each outcome, rather than relying primarily on pooled estimates. Without this, the DID estimates risk appearing mechanically generated rather than empirically validated (i.e., estimates appear without clear evidence of identifying variation).</p>
+<p>Assessment: Parallel trends appear plausible for crime outcomes but are insufficiently demonstrated overall, particularly for health outcomes where pre-trend evidence is weak.</p>
+<p><strong>Exogeneity of Treatment Assignment</strong></p>
+<p>Treatment assignment must be independent of potential outcomes conditional on controls. The authors attempt to address this through matching and timing tests, but the greening program was implemented through a real policy process rather than random allocation. The matching procedure is not fully transparent, and the quality of balance on unobservables remains unclear.</p>
+<p>Potential sources of <em>endogeneity</em> example:</p>
+<ul>
+<li>involvement of the community in lot improvement varies</li>
+<li>neighborhoods are already improving or worsening trajectories for other social or policy reasons</li>
+<li>redevelopment or gentrification pressure</li>
+<li>policing efforts or administrative selection processes</li>
+<li>areas with stronger maintenance capacity</li>
+</ul>
+<p>These mechanisms could violate <em>exogeneity</em> if treated lots were systematically located in areas already experiencing improvement.</p>
+<p>Assessment: Exogeneity is partially addressed but not clearly established. Residual selection bias due to endogenous program placement remains a credible concern.</p>
+<p><strong>Spillover / SUTVA</strong></p>
+<p>SUTVA requires that the treatment of one unit does not affect the outcomes of others.</p>
+<p>Spillovers are plausible because greening may change neighborhood visibility, informal surveillance, pedestrian activity, or crime displacement. The paper argues that spillovers are limited because the treated and control lots were, on average, 1.63 miles apart.</p>
+<p>However, this argument primarily addresses contamination of the control group. There are many possible ways that could hypothetically create spillovers:</p>
+<ul>
+<li>Spatial displacement of crime (interference across units): If greening reduces crime locally but shifts it to nearby untreated areas, estimated effects may reflect redistribution rather than net crime reduction.</li>
+<li>Localized treatment externalities (positive neighborhood spillovers): Improvements in one lot may increase perceived safety or collective efficacy in nearby blocks, meaning untreated units may partially receive treatment exposure.</li>
+</ul>
+<p>Assessment: Spillovers are likely limited for identification but not formally tested.</p>
+<p><strong>Model Specification</strong></p>
+<p>Correct specification requires appropriate spatial scale and controls.</p>
+<p>A key concern is spatial scale. Treatment effects, particularly on health outcomes, likely operate at very local distances (e.g., 100-500 meters) through mechanisms such as walking exposure, stress reduction, or perceived safety. Aggregating outcomes to the census tract level may dilute these effects and bias estimates toward zero due to spatial exposure misclassification.</p>
+<p>This concern is consistent with spatial causal designs in the related literature (for example, distance-gradient designs such as Stokes’ wind turbine studies), where treatment intensity is modeled as a function of distance rather than as a binary exposure.</p>
+<p>Relatedly, small-scale spatial behavioral mechanisms suggest health responses may occur primarily within walking distance of treated lots. If exposure is defined only at the tract level, this may misclassify true treatment exposure and attenuate estimated effects.</p>
+<p>Regional heterogeneity across Philadelphia sections further suggests that a single average treatment effect on the treated (ATT) may mask meaningful variation in treatment effects across neighborhoods.</p>
+<p>Assessment: Model specification is reasonable but likely too spatially coarse, potentially attenuating treatment estimates and masking meaningful spatial heterogeneity.</p>
 </section>
-<section id="sampling-external-validity-who-is-in-the-sample-to-whom-can-results-be-generalized" class="level4">
-<h4 class="anchored" data-anchor-id="sampling-external-validity-who-is-in-the-sample-to-whom-can-results-be-generalized">Sampling &amp; external validity: Who is in the sample? To whom can results be generalized?</h4>
-<p>The sample consists of vacant lots in Philadelphia that were either treated with a greening intervention or used as control sites.</p>
-<p>These results might be applicable to similar greening programs. Urban contexts with similar vacancy patterns could provide helpful insights, but we believe it is challenging to generalize the results beyond these types of cities.</p>
-<p>While there are some indications of effects, such as a reduction in gun violence and improvements in cholesterol and blood pressure, at 95% of the confidence intervals for the estimated treatment effects across all health outcomes cross zero. Additionally, the findings related to crime are somewhat mixed.</p>
-<p>This suggests that while there may be some positive effects, the findings are not definitive and should be interpreted cautiously.</p>
+<section id="c.-other-limitations" class="level4">
+<h4 class="anchored" data-anchor-id="c.-other-limitations">C. Other Limitations</h4>
+<p><strong>Measurement Validity</strong></p>
+<p>The primary limitation concerns the quality of health outcome measurement. Health indicators are derived from a biennial telephone survey (~5,000 respondents per wave, 30.7% response rate) using repeated cross-sections rather than longitudinal individuals. Outcomes are further constructed using tract-level small-area estimation and interpolation across survey years. These features introduce potential nonresponse bias, substantial measurement noise, post-processing distortion, and temporal misalignment between treatment exposure and outcome observation, all of which likely attenuate estimated treatment effects. In contrast, crime outcomes are based on administrative records with higher spatial and temporal precision, making them substantially more reliable.</p>
+<p>Assessment: Health results should be interpreted cautiously due to measurement error and limited statistical precision.</p>
+<p><strong>External Validity</strong></p>
+<p>Philadelphia represents a legacy city characterized by extensive vacancy from deindustrialization, concentrated poverty, parcel-scale abandonment, and an established low-cost greening intervention. This makes the study particularly informative for cities with similar urban vacancy dynamics (e.g., Detroit, Baltimore, Cleveland). The intervention also aligns with Jane Jacobs’ theory of “eyes on the street,” in which improvements to the physical environment can increase informal surveillance and neighborhood activity, providing a plausible behavioral mechanism for crime reduction. However, results may not generalize to cities with lower vacancy rates, suburban environments, different urban morphology, or interventions involving large-scale parks rather than parcel-level greening.</p>
+<p>Assessment: External validity is <em>strong within legacy-city contexts</em> but limited outside them.</p>
+<p><strong>Interpretation of Effect Strength</strong></p>
+<p>Based on the simulated replication results, several health estimates have confidence intervals that cross zero, indicating limited statistical precision rather than definitive null effects. While the original paper does not formally test this uncertainty, the replication suggests the study may be underpowered to detect modest health impacts, given the noisier measurement structure of the health data.</p>
+<p>Crime findings are also not uniformly consistent across categories. While gun assaults show the most robust reductions, other crime categories show weaker or mixed patterns, suggesting the intervention may shift neighborhood activity patterns rather than uniformly reduce all forms of disorder.</p>
+<p>Assessment: Evidence is strongest for <em>gun violence reduction</em>, weaker and more uncertain for health outcomes.</p>
+<p><strong>Survey Response and Timing</strong></p>
+<p>Health data are collected only every two years, which may smooth or delay detection of treatment effects. The relatively low response rate also raises concerns about representativeness, despite the use of weighting and tract-level estimation techniques. Because the paper provides limited detail on how these adjustments address potential bias, uncertainty remains regarding the precision of health estimates.</p>
+<p>Assessment: Survey structure and construction likely reduce statistical power and lead to imprecise estimates of health effects.</p>
 </section>
-<section id="measurement-are-the-outcome-and-treatment-variables-measured-accurately-and-without-systematic-bias" class="level4">
-<h4 class="anchored" data-anchor-id="measurement-are-the-outcome-and-treatment-variables-measured-accurately-and-without-systematic-bias">Measurement: Are the outcome and treatment variables measured accurately and without systematic bias?</h4>
-<p>Crime outcomes are likely measured relatively consistently because they rely on official crime reports. However, some outcomes such as vandalism and disorderly incidents may also reflect increased activity in the area. If greening attracts more people to use the space, there could be more opportunities for these events to occur or to be reported. There may also be some reporting bias depending on frequency of activities.</p>
-<p>However, we think that health outcomes are more difficult to interpret. The study itself discusses that health effects are weaker and harder to detect. It is difficult to clearly link greening directly to health outcomes because many other factors affect health.</p>
-<p>For example, self-reported poor health and high stress is a relatively weak measure. Blood pressure and cholesterol are more biologically direct indicators, but they can still be affected by many external influences. These outcomes are still influenced by factors such as diet, lifestyle, and access to healthcare, making it harder to attribute changes directly to the greening intervention.</p>
-</section>
-<section id="other-limitations-anything-else-that-affects-how-much-weight-you-would-put-on-the-studys-conclusions" class="level4">
-<h4 class="anchored" data-anchor-id="other-limitations-anything-else-that-affects-how-much-weight-you-would-put-on-the-studys-conclusions">Other limitations: Anything else that affects how much weight you would put on the study’s conclusions?</h4>
-<p>The separation of results by regions in Philadelphia still seems spectacle to us. While it makes sense to some extent since neighborhood context could influence how greening interventions are effective, the models already account for socioeconomic factors such as income and demographic variables. Therefore, it’s not entirely clear how much additional insight the regional split provides.</p>
-<p>It feels somewhat like a stretch to interpret the data this way, although it’s still plausible that neighborhood context affects the effectiveness of the interventions.</p>
-<p>Overall, the study offers evidence that greening vacant lots can reduce certain types of crime and improve health to some extent. However, the evidence regarding health outcomes is weaker, and conclusions should be drawn carefully. We believe that has to do with behavioural choices of health and lifestyle. Because of these factors, while the findings are suggestive and interesting, they should still be interpreted with caution.</p>
+<section id="d.-future-research-directions" class="level4">
+<h4 class="anchored" data-anchor-id="d.-future-research-directions">D. Future Research Directions</h4>
+<p>Several improvements could strengthen causal inference and improve measurement precision.</p>
+<p><strong>Measurement Improvements</strong></p>
+<p>Future studies could leverage advances in health and behavioral measurement technologies that were not widely available during the study period (1999–2008). These include wearable activity trackers, mobility and GPS exposure data, direct biometric measurements (e.g., blood pressure monitoring), and passive sensing technologies. These approaches could reduce reliance on self-reported outcomes and improve statistical power by reducing measurement error.</p>
+<p><strong>Causal Design Improvements</strong></p>
+<p>Future research could also strengthen identification by using more spatially precise exposure definitions, such as distance-based treatment intensity measures rather than binary tract-level exposure indicators. Related spatial causal designs (e.g., distance-gradient approaches such as the Stokes windfarm study) suggest this may better capture localized treatment effects. Additional improvements include formal event-study designs to test for parallel trends, heterogeneous treatment-effect analysis across neighborhood characteristics, and explicit testing of spillover radii to distinguish local effects from neighborhood diffusion.</p>
+<p><strong>Conceptual Improvements</strong></p>
+<p>Future work should explicitly test whether health responses operate at small-neighborhood scales, since behavioral responses to greening interventions likely occur within short walking distances rather than administrative boundaries. Understanding the spatial scale of response is critical for correctly specifying treatment exposure.</p>
+<p><strong>Overall Conclusion</strong></p>
+<p>Overall, the study provides reasonably strong causal evidence that vacant lot greening reduces gun violence, supported by a credible DID framework and relatively high-quality administrative crime data. In contrast, evidence for health improvements remains suggestive rather than definitive, largely due to noisier survey-based measurement, limited statistical precision, and potential spatial misalignment between treatment exposure and outcome measurement.</p>
+<p>Taken together, the results suggest that greening interventions may produce meaningful public safety benefits, while the evidence for health impacts should be interpreted as preliminary. Future research incorporating more precise health measurement, spatially refined exposure definitions, and stronger causal validation tests would help clarify whether the weaker health findings reflect truly modest effects or limitations of the empirical design.</p>
 
 
 </section>
