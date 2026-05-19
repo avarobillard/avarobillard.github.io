@@ -1,0 +1,40 @@
+#flower-left {
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  width: 320px;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  pointer-events: none;
+  z-index: 10;
+}
+
+#flower-left svg {
+  width: 280px;
+  height: 95vh;
+  overflow: visible;
+}
+
+.content {
+  margin-left: 340px;
+  max-width: 700px;
+  padding: 4rem 3rem;
+}
+
+#Stem,
+#Flower1a,
+#Flower1b,
+#Flower1c,
+#Flower1d,
+#Flower1e {
+
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform;
+
+}

@@ -36,3 +36,34 @@ h1, h2, h3, h4, h5, h6 {
   font-family: $nunito;
   font-weight: 300;
 }
+
+/* 1. WIDE DESKTOP: The text is centered, so the flower slides dynamically with it */
+#flower-left {
+  position: fixed;
+  top: 0;
+  left: calc(50% - 600px - 40px) !important; /* Travels with the text */
+  height: 100vh;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 2. THE STICKY PHASE: When the window drops below 1200px, the text hits the left edge and locks.
+   We force the flower to stop moving and "stick" at a fixed distance from the edge. */
+@media (max-width: 1200px) {
+  #flower-left {
+    left: 0px !important; /* Adjust this number to change how close it sticks next to your left margin */
+  }
+}
+
+/* 3. MOBILE DISAPPEARANCE: Once the screen hits phone/iPhone width, hide it completely */
+@media (max-width: 992px) {
+  #flower-left, 
+  #flower-right {
+    display: none !important; /* Vanishes completely */
+  }
+  
+  .content {
+    margin-left: 0 !important;
+    padding: 0 1.5rem !important;
+  }
+}

@@ -137,13 +137,55 @@
     "href": "index.html",
     "title": "AVA ROBILLARD",
     "section": "",
-    "text": "Hi! I’m Ava, an early career data scientist with a background in plant science. Currently, I am pursuing a Master’s in Environmental Data Science at the Bren School of Environmental Science & Management. I am building expertise in Python, geospatial analysis, machine learning, and data management, and am looking to apply these skills in creative, interdisciplinary projects. I’m always striving to learn and create in my work, and I especially value the growth that comes from working at the intersection of biological and technical fields. When I’m not busy coding, you can usually find me outside in the sunshine, curating my Pinterest boards and Spotify playlists to perfection, or possibly adopting another plant.\nPlease check out my resume and explore my website to gain a fuller picture of my experience as an environmental data scientist!\n\nEducationResearch ExperienceProfessional Experience\n\n\nMaster, Environmental Data Science (Expected June 2026) | Bren School of Environmental Science & Management | University of California, Santa Barbara (UCSB)\nBachelor of Science, Plant Sciences, minor in Data Science (May 2025) | Cornell University, Ithaca NY\n\n\nUndergraduate Research Assistant (2022-2025) | Phylogenetics of Non-model Plant Species | Specht Lab- Evolution of Plant Form and Function, Cornell University | Advisor: Jacob Landis, Ph.D.\nHerbarium Research Assistant (2023-2025) | Liberty Hyde Bailey Herbarium, Cornell University\nComputational Biology REU Intern (2024) | Project: Spatio-temporal Analysis of Urban Heat Island Effect Using Remote Sensing, GIS, and Google Earth Engine\n\n\nMaster’s Capstone Project (2026) | Rincon’s Bio Weaver Tool- From Disparate Data to Actionable Analysis | Clients: Rincon Consultants"
+    "text": "Hi! I’m Ava, a data scientist with a background in plant science. Currently, I am pursuing a Master’s in Environmental Data Science at the Bren School of Environmental Science & Management. I am building expertise in geospatial analysis, machine learning, and data management, with a particular interest in communicating findings from data in compelling ways. I’m always striving to learn and create in my work, and I especially value the growth that comes from working at the intersection of biological and technical fields. When I’m not busy coding, you can usually find me outside in the sunshine, curating my Pinterest boards and Spotify playlists to perfection, or possibly adopting another plant.\nPlease check out my resume and explore my website to gain a fuller picture of my experience as an environmental data scientist!\n\nEducationResearchProfessional Experience\n\n\nMaster, Environmental Data Science (Expected June 2026) | Bren School of Environmental Science & Management | University of California, Santa Barbara (UCSB)\nBachelor of Science, Plant Sciences, minor in Data Science (May 2025) | Cornell University, Ithaca NY\n\n\nUndergraduate Research Assistant (2022-2025) | Phylogenetics of Non-model Plant Species | Specht Lab- Evolution of Plant Form and Function, Cornell University | Advisor: Jacob Landis, Ph.D.\nHerbarium Research Assistant (2023-2025) | Liberty Hyde Bailey Herbarium, Cornell University\nComputational Biology REU Intern (2024) | Project: Spatio-temporal Analysis of Urban Heat Island Effect Using Remote Sensing, GIS, and Google Earth Engine\n\n\nMaster’s Capstone Project (2026) | Rincon’s Bio Weaver Tool- From Disparate Data to Actionable Analysis | Clients: Rincon Consultants"
   },
   {
     "objectID": "posts.html",
     "href": "posts.html",
     "title": "Blog",
     "section": "",
-    "text": "New York City’s Urban Forest\n\n\n\nMEDS\n\nR\n\nData Visualization\n\n\n\nBuilding an infographic using the 2015 NYC Tree Census\n\n\n\nAva Robillard\n\n\nMar 9, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoes Urban Greening Reduce Crime and Promote Health?\n\n\n\nMEDS\n\nStatistics\n\n\n\nReplicating a difference-in-differences policy analysis (Branas et al., 2011)\n\n\n\nAva Robillard\n\n\nMar 6, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nHouston Power Grid Analysis\n\n\n\nMEDS\n\nR\n\nGeospatial\n\n\n\nA geospatial exploration of Houston metropolitan area power outages caused by 2021 winter storms\n\n\n\nAva Robillard\n\n\nDec 12, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nHerbarium Specimen Phenology\n\n\n\nMEDS\n\nR\n\nStatistics\n\n\n\nUsing logistic and segemented regression models to analyze shifts in leaf color timing\n\n\n\nAva Robillard\n\n\nDec 11, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nLos Angeles Wildfires: False Color Imagery & Socioeconomic Analysis\n\n\n\nMEDS\n\nPython\n\nGeospatial\n\n\n\nUsing remote sensing and EJI data to analyze the 2025 Eaton and Palisades Fires\n\n\n\nAva Robillard\n\n\nDec 1, 2025\n\n\n\n\n\n\nNo matching items"
+    "text": "New York City’s Urban Forest\n\n\n\nMEDS\n\nR\n\nData Visualization\n\n\n\nBuilding an infographic using the 2015 NYC Tree Census\n\n\n\nAva Robillard\n\n\nMar 9, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nDoes Urban Greening Reduce Crime and Promote Health?\n\n\n\nMEDS\n\nStatistics\n\n\n\nReplicating a difference-in-differences policy analysis (Branas et al., 2011)\n\n\n\nAva Robillard\n\n\nMar 6, 2026\n\n\n\n\n\n\n\n\n\n\n\n\n\nHouston Power Grid Analysis\n\n\n\nMEDS\n\nR\n\nGeospatial\n\n\n\nA geospatial exploration of Houston metropolitan area power outages caused by 2021 winter storms\n\n\n\nAva Robillard\n\n\nDec 12, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nHerbarium Specimen Phenology\n\n\n\nMEDS\n\nR\n\nStatistics\n\n\n\nUsing logistic and segemented regression models to analyze shifts in leaf color timing\n\n\n\nAva Robillard\n\n\nDec 11, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nEDS 242: Could you imagine a world without farmers markets?\n\n\n\nMEDS\n\n\n\nExploring a case of data bias in agriculture\n\n\n\nAva Robillard\n\n\nDec 10, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nLos Angeles Wildfires: False Color Imagery & Socioeconomic Analysis\n\n\n\nMEDS\n\nPython\n\nGeospatial\n\n\n\nUsing remote sensing and EJI data to analyze the 2025 Eaton and Palisades Fires\n\n\n\nAva Robillard\n\n\nDec 1, 2025\n\n\n\n\n\n\n\n\n\n\n\n\n\nMy first blog post!\n\n\n\nMEDS\n\nR\n\n\n\na short description of the blog post\n\n\n\nAva Robillard\n\n\nNov 12, 2025\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "sandbox.html#section-1",
+    "href": "sandbox.html#section-1",
+    "title": "Flower Sandbox",
+    "section": "Section 1",
+    "text": "Section 1\nLorem ipsum dolor sit amet, consectetur adipiscing elit."
+  },
+  {
+    "objectID": "sandbox.html#section-2",
+    "href": "sandbox.html#section-2",
+    "title": "Flower Sandbox",
+    "section": "Section 2",
+    "text": "Section 2\nMauris non tempor quam, et lacinia sapien."
+  },
+  {
+    "objectID": "sandbox.html#section-3",
+    "href": "sandbox.html#section-3",
+    "title": "Flower Sandbox",
+    "section": "Section 3",
+    "text": "Section 3\nInteger vel turpis ultricies, facilisis lectus sed, maximus nibh."
+  },
+  {
+    "objectID": "sandbox.html#section-4",
+    "href": "sandbox.html#section-4",
+    "title": "Flower Sandbox",
+    "section": "Section 4",
+    "text": "Section 4\nVivamus sit amet ligula non erat interdum interdum."
+  },
+  {
+    "objectID": "sandbox.html",
+    "href": "sandbox.html",
+    "title": "Ava Robillard",
+    "section": "",
+    "text": "&lt;!DOCTYPE html&gt;\n\n\n\n\n\nFlower Scroll Demo\n\n\n\n\n\n        \n\n\n                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \n\n\n\n&lt;h1&gt;Hi, I'm [your name]&lt;/h1&gt;\n&lt;p&gt;Welcome to my corner of the internet.&lt;/p&gt;\n&lt;p&gt;Scroll down to watch the lily bloom.&lt;/p&gt;\n&lt;p class=\"hint\"&gt;↓ scroll&lt;/p&gt;\n\n\n&lt;h2&gt;About me&lt;/h2&gt;\n&lt;p&gt;This is where your bio goes. Each petal opens one by one as you scroll down — the stem sways first, the leaf unfurls, then the petals open in sequence.&lt;/p&gt;\n\n\n&lt;h2&gt;Projects&lt;/h2&gt;\n&lt;p&gt;Replace this with your work — research, writing, design, code, whatever you make.&lt;/p&gt;\n\n\n&lt;h2&gt;Contact&lt;/h2&gt;\n&lt;p&gt;Reach me at [your email] or find me on [platforms].&lt;/p&gt;"
+  },
+  {
+    "objectID": "flower-scroll-demo.html",
+    "href": "flower-scroll-demo.html",
+    "title": "Scroll to bloom",
+    "section": "",
+    "text": "Scroll to bloom\n  A scroll-driven SVG flower for your Quarto site\n  ↓ scroll\n\n\n\n\n  \n    \n      \n      \n      \n      \n        \n        \n        Loading flower…\n      \n    \n  \n\n\n\n\n  In full bloom.\n  \n    Each petal group in your SVG is animated independently,\n    staggered across the scroll distance so the flower unfurls\n    naturally as your visitor moves down the page."
   }
 ]
