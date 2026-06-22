@@ -41,7 +41,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-764c560042b5126cf849195534e68331.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-4c9f4776e0c9590d91f045c2bb5b7a71.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -119,19 +119,9 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#a-little-bit-of-background" id="toc-a-little-bit-of-background" class="nav-link active" data-scroll-target="#a-little-bit-of-background">A little bit of background!</a></li>
-  <li><a href="#plant-science-gallery" id="toc-plant-science-gallery" class="nav-link" data-scroll-target="#plant-science-gallery">Plant Science Gallery</a></li>
-  <li><a href="#currently" id="toc-currently" class="nav-link" data-scroll-target="#currently">Currently!</a></li>
-  </ul>
-</nav>
-    </div>
+    
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content column-page" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -140,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="quarto-title-meta column-page-left">
+<div class="quarto-title-meta column-page">
 
     
   
@@ -154,9 +144,7 @@ ul.task-list li input[type="checkbox"] {
 
 <style>
 #imageCarousel {
-  max-width: 500px;
-  height: 500px;
-  margin: 30px auto;
+  height: 550px;
 }
 
 #imageCarousel .carousel-inner,
@@ -167,16 +155,27 @@ ul.task-list li input[type="checkbox"] {
 #imageCarousel .carousel-item img {
   height: 100%;
   width: 100%;
-  object-fit: cover;  /* This is the key - crops nicely */
+  object-fit: cover;  
 }
+
+@media (max-width: 850px) {
+  .columns {
+    flex-direction: column;
+  }
+  .column {
+    width: 100% !important;
+  }
+}
+
 </style>
+<div class="columns">
+<div class="column" style="width:50%;">
 <section id="a-little-bit-of-background" class="level3">
 <h3 class="anchored" data-anchor-id="a-little-bit-of-background">A little bit of background!</h3>
 <p>I grew up in the rural Texas hill country, loving the outdoors and spending sunrise to sunset either hiking or paddle boarding on the river near my house. My passion for the environment grew throughout high school when I was able to work at a plant nursery during the summers and on weekends, learning the scientific names of many native Texas plants and how to care for each one.</p>
 <p>As a first-generation college student, my world expanded immensely when I got the opportunity to attend Cornell University for Plant Science. I explored many areas of the subject, from evolution to landscape architecture. I eventually narrowed down to concentrating in computational biology, and later discovered that I am most passionate about using data to better understand our environment, whether that be using statistics to predict the changes in flowering time due to climate change or mapping species diversity. To complement my plant science education, I branched out and took many classes in the computer science, information science, and math departments to learn how I could apply these concepts to plants and the environment. I completed a minor in data science and worked on various projects integrating data and the environment, including a few years of bioinformatics research on the phylogenetics of non-model plant species.</p>
 </section>
-<section id="plant-science-gallery" class="level3">
-<h3 class="anchored" data-anchor-id="plant-science-gallery">Plant Science Gallery</h3>
+</div><div class="column" style="padding-left: 20px; padding-top: 70px;">
 <div id="imageCarousel" class="carousel slide" data-bs-wrap="false">
   <div class="carousel-inner">
     
@@ -219,10 +218,15 @@ ul.task-list li input[type="checkbox"] {
     <span class="visually-hidden">Next</span>
   </button>
 </div>
+<section id="plant-science-gallery" class="level4">
+<h4 class="anchored" data-anchor-id="plant-science-gallery">Plant Science Gallery</h4>
 </section>
+</div>
+</div>
 <section id="currently" class="level3">
 <h3 class="anchored" data-anchor-id="currently">Currently!</h3>
-<p>I am now pursuing a Master’s degree in Environmental Data Science at the University of California, Santa Barbara. I am transitioning into a more data science focused realm, and finding that I value a space where there is always more to learn and practice. Working on a data management centered capstone project for an environmental consulting company has also given me an interest in industry post-graduation, and I hope to begin a career that allows me to be innovative and continue developing my skill set at the intersection of data and the environment.</p>
+<p>I graduated in June 2026 with a Master’s degree in Environmental Data Science from the University of California, Santa Barbara. As a large part of my time at the Bren School, I completed a data management centered capstone project for Rincon Consultants, a California-based environmental consulting company. My team and I built the Bio Weaver tool to act as a central application for conducting spatial searches for special status species near project sites.</p>
+<p>I have found that I deeply value the data science space where there is always more to learn and practice, and hope to begin a career that allows me to be innovative and continue developing my skill set at the intersection of ecology, design, and data.</p>
 
 
 </section>
