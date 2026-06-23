@@ -34,8 +34,13 @@ $body-color: $color-5;
   width: auto;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h2, h3, h4, h5, h6 {
   font-family: $nunito;
+  font-weight: 300;
+}
+
+h1 {
+  font-family: $VT323;
   font-weight: 300;
 }
 

@@ -1,5 +1,5 @@
 ---
-title: "About"
+title: "ABOUT"
 toc: false
 ---
 
@@ -87,7 +87,9 @@ toc: false
   </button>
 </div>
 ```
-#### Plant Science Gallery
+::: {style="text-align: center;"}
+✰ PLANT SCIENCE GALLERY ✰
+:::
 :::
 
 ::::

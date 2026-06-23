@@ -4,16 +4,18 @@ project:
 
 website:
   title: "Ava Robillard"
-  favicon: images/favicon.png
+  favicon: images/fav.png
   navbar:
     title: false
-    logo: images/logo2.png
-    #logo-alt: insert description of logo
+    logo: images/fav.png
+    #logo-alt: insert description of logo (optional)
     right:
       - href: index.qmd
         text: Home
-      - about.qmd
-      - posts.qmd
+      - href: about.qmd
+        text: About
+      - href: posts.qmd
+        text: Blog
       #- href: resources.qmd
       #  text: Resources
       - icon: github
