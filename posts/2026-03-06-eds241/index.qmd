@@ -8,7 +8,7 @@ authors: "William Lien, Jay Kim, Ava Robillard"
 citation:
   url: https://avarobillard.github.io/posts/2026-03-06-eds241
 #bibliography: references.bib
-draft: false
+draft: true
 draft-mode: linked
 ---
 
