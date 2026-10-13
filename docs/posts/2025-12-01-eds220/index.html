@@ -260,7 +260,7 @@ div.csl-indent {
 <div class="figure">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="fireimage.png" class="img-fluid figure-img" style="width:80.0%"></p>
+<p><img src="fireimage.jpg" class="img-fluid figure-img" style="width:80.0%"></p>
 <figcaption>View of Topanga, CA during the Palisades fire; Kyle Grillot for the New York Times</figcaption>
 </figure>
 </div>
@@ -287,7 +287,7 @@ div.csl-indent {
 <p>2024 EJI data for California will be used for this analysis, retrieved in a geodatabase format from the <a href="https://www.atsdr.cdc.gov/place-health/php/eji/eji-data-download.html">Agency for Toxic Substances and Disease Registry</a>. This data contains a variety of socioeconomic variables that could influence a community’s response to a wildfire, such as percentage without internet, aged 65+, or with asthma <span class="citation" data-cites="cdc_eji_year">(<a href="#ref-cdc_eji_year" role="doc-biblioref">Centers for Disease Control and Prevention and Agency for Toxic Substances and Disease Registry 2024</a>)</span>.</p>
 <section id="load-packages" class="level4">
 <h4 class="anchored" data-anchor-id="load-packages">Load packages</h4>
-<div id="f2bcfb80" class="cell" data-execution_count="1">
+<div id="e9839a3d" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -306,7 +306,7 @@ div.csl-indent {
 <section id="fire-perimeter-data-exploration" class="level3">
 <h3 class="anchored" data-anchor-id="fire-perimeter-data-exploration">1. Fire perimeter data exploration</h3>
 <p>First, we want to import the data and do some initial exploration.</p>
-<div id="379a7b6f" class="cell" data-execution_count="2">
+<div id="3c3ec5e7" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import Palisades fire perimeter shapefile</span></span>
@@ -319,7 +319,7 @@ div.csl-indent {
 </details>
 </div>
 <p>Palisades Fire:</p>
-<div id="e034cc82" class="cell" data-execution_count="3">
+<div id="cede8cc5" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display first row of Palisades fire data</span></span>
@@ -356,7 +356,7 @@ div.csl-indent {
 </div>
 </div>
 <p>Eaton Fire:</p>
-<div id="0d153d36" class="cell" data-execution_count="4">
+<div id="47e13493" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Display first row of Eaton fire data</span></span>
@@ -393,7 +393,7 @@ div.csl-indent {
 </div>
 </div>
 <p>Both data sets contain an OBJECTID, TYPE, SHAPE__ARE, SHAPE__LEN, and GEOMETRY column. The geometry type is polygon, so we can visualize what these look like using <code>matplotlib</code>.</p>
-<div id="abfd83e0" class="cell" data-execution_count="5">
+<div id="91caa6be" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize polygons</span></span>
@@ -419,7 +419,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
-<div id="afb3edf8" class="cell" data-execution_count="6">
+<div id="eb4c093f" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Examine CRS details</span></span>
@@ -435,7 +435,7 @@ Is geographic?: False
 Is projected?: True</code></pre>
 </div>
 </div>
-<div id="0ccc5dc5" class="cell" data-execution_count="7">
+<div id="b09fac5c" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check that the CRS is the same for both fire perimeter data sets</span></span>
@@ -451,7 +451,7 @@ Is projected?: True</code></pre>
 <h3 class="anchored" data-anchor-id="netcdf-data-import-and-exploration">2. NetCDF data import and exploration</h3>
 <p>Next, we want to explore our <code>xarray</code> Landsat data, which comes in a NetCDF format. A NetCDF (network Common Data Form) is a data format that is designed to be self-describing and machine-independent, making it ideal for working with multi-dimensional datasets that have a lot of metadata required to understand the content. The <a href="https://docs.unidata.ucar.edu/netcdf-c/current/netcdf_data_model.html#classic_model">NetCDF data model</a> consists of variables (the measured quantities), dimensions (the axes/independent quantities at which we measure the variables), and attributes (metadata).</p>
 <p>Opening our NetCDF file with <code>xarray</code> gives us an <code>xarray.DataSet</code>, which contains all of the key components of a NetCDF as well as coordinates (the dimension’s values/units) <span class="citation" data-cites="hoyer2017xarray">(<a href="#ref-hoyer2017xarray" role="doc-biblioref">Hoyer and Hamman 2017</a>)</span>.</p>
-<div id="4acd414f" class="cell" data-execution_count="8">
+<div id="87eeec2c" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import Landsat data as xarray.Dataset</span></span>
@@ -843,17 +843,17 @@ Data variables:
     blue         (y, x) float32 16MB ...
     nir08        (y, x) float32 16MB ...
     swir22       (y, x) float32 16MB ...
-    spatial_ref  int64 8B ...</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-0930a509-faf1-42e2-ab46-b545b5201155" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-0930a509-faf1-42e2-ab46-b545b5201155" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">y</span>: 1418</li><li><span class="xr-has-index">x</span>: 2742</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-b2a6a53c-c8b9-4f1b-9743-a02ca4145c76" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-b2a6a53c-c8b9-4f1b-9743-a02ca4145c76" class="xr-section-summary">Coordinates: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.799e+06 3.799e+06 ... 3.757e+06</div><input id="attrs-de7008d8-f4af-40f5-a7ce-c96758f26cd2" class="xr-var-attrs-in" type="checkbox"><label for="attrs-de7008d8-f4af-40f5-a7ce-c96758f26cd2" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-327c6415-bf60-41d2-943b-3b97ff69c036" class="xr-var-data-in" type="checkbox"><label for="data-327c6415-bf60-41d2-943b-3b97ff69c036" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>units :</span></dt><dd>metre</dd><dt><span>resolution :</span></dt><dd>-30.0</dd><dt><span>crs :</span></dt><dd>EPSG:32611</dd><dt><span>axis :</span></dt><dd>Y</dd><dt><span>long_name :</span></dt><dd>y coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_y_coordinate</dd></dl></div><div class="xr-var-data"><pre>array([3799050., 3799020., 3798990., ..., 3756600., 3756570., 3756540.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.344e+05 3.344e+05 ... 4.166e+05</div><input id="attrs-ff71e6b0-cc9e-4aed-bbbe-6e9ebff90e82" class="xr-var-attrs-in" type="checkbox"><label for="attrs-ff71e6b0-cc9e-4aed-bbbe-6e9ebff90e82" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-efd260c5-2851-46af-afae-8eb756a3147d" class="xr-var-data-in" type="checkbox"><label for="data-efd260c5-2851-46af-afae-8eb756a3147d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>units :</span></dt><dd>metre</dd><dt><span>resolution :</span></dt><dd>30.0</dd><dt><span>crs :</span></dt><dd>EPSG:32611</dd><dt><span>axis :</span></dt><dd>X</dd><dt><span>long_name :</span></dt><dd>x coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_x_coordinate</dd></dl></div><div class="xr-var-data"><pre>array([334410., 334440., 334470., ..., 416580., 416610., 416640.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>time</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-ae368ab5-f3ef-4b45-a095-26db87ef04db" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-ae368ab5-f3ef-4b45-a095-26db87ef04db" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-40c05543-0e87-41fc-a8cb-967670cd47c8" class="xr-var-data-in" type="checkbox"><label for="data-40c05543-0e87-41fc-a8cb-967670cd47c8" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[1 values with dtype=datetime64[ns]]</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-765d7f4e-a884-4628-81a5-bf7683a0ce0b" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-765d7f4e-a884-4628-81a5-bf7683a0ce0b" class="xr-section-summary">Data variables: <span>(6)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>red</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-a4ee2a4e-13ce-4129-a361-47af1d1b1a8a" class="xr-var-attrs-in" type="checkbox"><label for="attrs-a4ee2a4e-13ce-4129-a361-47af1d1b1a8a" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-a0fcd626-9287-49b4-a0bf-82a37f39485d" class="xr-var-data-in" type="checkbox"><label for="data-a0fcd626-9287-49b4-a0bf-82a37f39485d" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>green</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-3b8ebe77-1972-4fcd-91f6-fba3e52555ad" class="xr-var-attrs-in" type="checkbox"><label for="attrs-3b8ebe77-1972-4fcd-91f6-fba3e52555ad" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-bd5c73b8-cf43-4e63-b803-c3190bd8dea5" class="xr-var-data-in" type="checkbox"><label for="data-bd5c73b8-cf43-4e63-b803-c3190bd8dea5" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>blue</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-291de5a0-24a7-4543-a8cf-e467c414064f" class="xr-var-attrs-in" type="checkbox"><label for="attrs-291de5a0-24a7-4543-a8cf-e467c414064f" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-2f1b83c6-14a2-41b1-ae25-73a04ce689cb" class="xr-var-data-in" type="checkbox"><label for="data-2f1b83c6-14a2-41b1-ae25-73a04ce689cb" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>nir08</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-d3853281-5921-40f5-a8fd-b21aa96ec380" class="xr-var-attrs-in" type="checkbox"><label for="attrs-d3853281-5921-40f5-a8fd-b21aa96ec380" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-cefdf28a-032f-4104-a79d-cd164fcd5ca9" class="xr-var-data-in" type="checkbox"><label for="data-cefdf28a-032f-4104-a79d-cd164fcd5ca9" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>swir22</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-85f59bbe-8a6e-4c6a-963f-c8c00e0575cd" class="xr-var-attrs-in" type="checkbox"><label for="attrs-85f59bbe-8a6e-4c6a-963f-c8c00e0575cd" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-1aa91f39-22ee-4552-8388-5b70d326ea7a" class="xr-var-data-in" type="checkbox"><label for="data-1aa91f39-22ee-4552-8388-5b70d326ea7a" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-f52c4986-98cd-461d-b5fd-c737b2901f67" class="xr-var-attrs-in" type="checkbox"><label for="attrs-f52c4986-98cd-461d-b5fd-c737b2901f67" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-7b0c7617-66cd-49e8-af3b-23667c5fa79b" class="xr-var-data-in" type="checkbox"><label for="data-7b0c7617-66cd-49e8-af3b-23667c5fa79b" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["WGS 84 / UTM zone 11N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32611"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>projected_crs_name :</span></dt><dd>WGS 84 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["WGS 84 / UTM zone 11N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32611"]]</dd><dt><span>GeoTransform :</span></dt><dd>334395.0 30.0 0.0 3799065.0 0.0 -30.0</dd></dl></div><div class="xr-var-data"><pre>[1 values with dtype=int64]</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-b4b9a216-8e59-4a83-aea7-d2a2f4cc1877" class="xr-section-summary-in" type="checkbox"><label for="section-b4b9a216-8e59-4a83-aea7-d2a2f4cc1877" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-e655f21a-10b2-4919-96ce-51cc0c29b403" class="xr-index-data-in" type="checkbox"><label for="index-e655f21a-10b2-4919-96ce-51cc0c29b403" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([3799050.0, 3799020.0, 3798990.0, 3798960.0, 3798930.0, 3798900.0,
+    spatial_ref  int64 8B ...</pre><div class="xr-wrap" style="display:none"><div class="xr-header"><div class="xr-obj-type">xarray.Dataset</div></div><ul class="xr-sections"><li class="xr-section-item"><input id="section-de91ef89-0b1d-4840-a344-b570229ce5b3" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-de91ef89-0b1d-4840-a344-b570229ce5b3" class="xr-section-summary" title="Expand/collapse section">Dimensions:</label><div class="xr-section-inline-details"><ul class="xr-dim-list"><li><span class="xr-has-index">y</span>: 1418</li><li><span class="xr-has-index">x</span>: 2742</li></ul></div><div class="xr-section-details"></div></li><li class="xr-section-item"><input id="section-de1bc414-d6bc-4db5-87ba-cb231bbfbe27" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-de1bc414-d6bc-4db5-87ba-cb231bbfbe27" class="xr-section-summary">Coordinates: <span>(3)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">y</span></div><div class="xr-var-dims">(y)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.799e+06 3.799e+06 ... 3.757e+06</div><input id="attrs-1d0c0691-e61b-49e4-a100-fd56f0b61ea4" class="xr-var-attrs-in" type="checkbox"><label for="attrs-1d0c0691-e61b-49e4-a100-fd56f0b61ea4" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-740442e6-039d-4fa4-9d58-3110c3b7fbd7" class="xr-var-data-in" type="checkbox"><label for="data-740442e6-039d-4fa4-9d58-3110c3b7fbd7" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>units :</span></dt><dd>metre</dd><dt><span>resolution :</span></dt><dd>-30.0</dd><dt><span>crs :</span></dt><dd>EPSG:32611</dd><dt><span>axis :</span></dt><dd>Y</dd><dt><span>long_name :</span></dt><dd>y coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_y_coordinate</dd></dl></div><div class="xr-var-data"><pre>array([3799050., 3799020., 3798990., ..., 3756600., 3756570., 3756540.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span class="xr-has-index">x</span></div><div class="xr-var-dims">(x)</div><div class="xr-var-dtype">float64</div><div class="xr-var-preview xr-preview">3.344e+05 3.344e+05 ... 4.166e+05</div><input id="attrs-c060d51f-6a37-4cbc-9fa4-43a53a992480" class="xr-var-attrs-in" type="checkbox"><label for="attrs-c060d51f-6a37-4cbc-9fa4-43a53a992480" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-270aef24-91ee-4413-bbdb-6eacbb2f4a44" class="xr-var-data-in" type="checkbox"><label for="data-270aef24-91ee-4413-bbdb-6eacbb2f4a44" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>units :</span></dt><dd>metre</dd><dt><span>resolution :</span></dt><dd>30.0</dd><dt><span>crs :</span></dt><dd>EPSG:32611</dd><dt><span>axis :</span></dt><dd>X</dd><dt><span>long_name :</span></dt><dd>x coordinate of projection</dd><dt><span>standard_name :</span></dt><dd>projection_x_coordinate</dd></dl></div><div class="xr-var-data"><pre>array([334410., 334440., 334470., ..., 416580., 416610., 416640.])</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>time</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">datetime64[ns]</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-3689701f-864d-4949-98d2-d853133e3f47" class="xr-var-attrs-in" type="checkbox" disabled=""><label for="attrs-3689701f-864d-4949-98d2-d853133e3f47" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-e4d0ebb0-820e-4185-b3c7-ab4cca5dffe9" class="xr-var-data-in" type="checkbox"><label for="data-e4d0ebb0-820e-4185-b3c7-ab4cca5dffe9" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"></dl></div><div class="xr-var-data"><pre>[1 values with dtype=datetime64[ns]]</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-132a446a-9d72-4804-924a-dda256e0c0b8" class="xr-section-summary-in" type="checkbox" checked=""><label for="section-132a446a-9d72-4804-924a-dda256e0c0b8" class="xr-section-summary">Data variables: <span>(6)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-var-name"><span>red</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-fabd8766-71c6-453e-96b8-f6de238c2bb5" class="xr-var-attrs-in" type="checkbox"><label for="attrs-fabd8766-71c6-453e-96b8-f6de238c2bb5" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-ee8894d5-cc20-43a9-9b90-800da8bb7861" class="xr-var-data-in" type="checkbox"><label for="data-ee8894d5-cc20-43a9-9b90-800da8bb7861" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>green</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-b74a8bdc-f81d-429c-be53-2633cf36979e" class="xr-var-attrs-in" type="checkbox"><label for="attrs-b74a8bdc-f81d-429c-be53-2633cf36979e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-bd807f0b-31dd-4ad2-95ab-0c0edab08031" class="xr-var-data-in" type="checkbox"><label for="data-bd807f0b-31dd-4ad2-95ab-0c0edab08031" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>blue</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-9599ec61-5bcd-4109-805b-b421d56a7acd" class="xr-var-attrs-in" type="checkbox"><label for="attrs-9599ec61-5bcd-4109-805b-b421d56a7acd" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-f4243f0f-7a10-4588-85b3-e215f28dd018" class="xr-var-data-in" type="checkbox"><label for="data-f4243f0f-7a10-4588-85b3-e215f28dd018" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>nir08</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-fef22e62-29df-4e86-af19-13d663d9c0f0" class="xr-var-attrs-in" type="checkbox"><label for="attrs-fef22e62-29df-4e86-af19-13d663d9c0f0" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-1a63a2f9-af85-412b-bd6b-eb006d8f3f8c" class="xr-var-data-in" type="checkbox"><label for="data-1a63a2f9-af85-412b-bd6b-eb006d8f3f8c" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>swir22</span></div><div class="xr-var-dims">(y, x)</div><div class="xr-var-dtype">float32</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-9f35f64b-bfac-4d15-9528-019ce28ba860" class="xr-var-attrs-in" type="checkbox"><label for="attrs-9f35f64b-bfac-4d15-9528-019ce28ba860" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-60463a0f-7402-4a69-a555-2609e34537fa" class="xr-var-data-in" type="checkbox"><label for="data-60463a0f-7402-4a69-a555-2609e34537fa" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>grid_mapping :</span></dt><dd>spatial_ref</dd></dl></div><div class="xr-var-data"><pre>[3888156 values with dtype=float32]</pre></div></li><li class="xr-var-item"><div class="xr-var-name"><span>spatial_ref</span></div><div class="xr-var-dims">()</div><div class="xr-var-dtype">int64</div><div class="xr-var-preview xr-preview">...</div><input id="attrs-bc35b7a3-c22e-4115-98ac-bf41afcfa60e" class="xr-var-attrs-in" type="checkbox"><label for="attrs-bc35b7a3-c22e-4115-98ac-bf41afcfa60e" title="Show/Hide attributes"><svg class="icon xr-icon-file-text2"><use href="#icon-file-text2"></use></svg></label><input id="data-85542ed5-8a24-421a-8a84-ab236f8f3561" class="xr-var-data-in" type="checkbox"><label for="data-85542ed5-8a24-421a-8a84-ab236f8f3561" title="Show/Hide data repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-var-attrs"><dl class="xr-attrs"><dt><span>crs_wkt :</span></dt><dd>PROJCS["WGS 84 / UTM zone 11N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32611"]]</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.314245179</dd><dt><span>inverse_flattening :</span></dt><dd>298.257223563</dd><dt><span>reference_ellipsoid_name :</span></dt><dd>WGS 84</dd><dt><span>longitude_of_prime_meridian :</span></dt><dd>0.0</dd><dt><span>prime_meridian_name :</span></dt><dd>Greenwich</dd><dt><span>geographic_crs_name :</span></dt><dd>WGS 84</dd><dt><span>horizontal_datum_name :</span></dt><dd>World Geodetic System 1984</dd><dt><span>projected_crs_name :</span></dt><dd>WGS 84 / UTM zone 11N</dd><dt><span>grid_mapping_name :</span></dt><dd>transverse_mercator</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_central_meridian :</span></dt><dd>-117.0</dd><dt><span>false_easting :</span></dt><dd>500000.0</dd><dt><span>false_northing :</span></dt><dd>0.0</dd><dt><span>scale_factor_at_central_meridian :</span></dt><dd>0.9996</dd><dt><span>spatial_ref :</span></dt><dd>PROJCS["WGS 84 / UTM zone 11N",GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]],PROJECTION["Transverse_Mercator"],PARAMETER["latitude_of_origin",0],PARAMETER["central_meridian",-117],PARAMETER["scale_factor",0.9996],PARAMETER["false_easting",500000],PARAMETER["false_northing",0],UNIT["metre",1,AUTHORITY["EPSG","9001"]],AXIS["Easting",EAST],AXIS["Northing",NORTH],AUTHORITY["EPSG","32611"]]</dd><dt><span>GeoTransform :</span></dt><dd>334395.0 30.0 0.0 3799065.0 0.0 -30.0</dd></dl></div><div class="xr-var-data"><pre>[1 values with dtype=int64]</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-3cb03a8b-de78-45f7-b385-4e98c59b45e5" class="xr-section-summary-in" type="checkbox"><label for="section-3cb03a8b-de78-45f7-b385-4e98c59b45e5" class="xr-section-summary">Indexes: <span>(2)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><ul class="xr-var-list"><li class="xr-var-item"><div class="xr-index-name"><div>y</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-d54ba133-3b59-4e8b-87b4-60780c974286" class="xr-index-data-in" type="checkbox"><label for="index-d54ba133-3b59-4e8b-87b4-60780c974286" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([3799050.0, 3799020.0, 3798990.0, 3798960.0, 3798930.0, 3798900.0,
        3798870.0, 3798840.0, 3798810.0, 3798780.0,
        ...
        3756810.0, 3756780.0, 3756750.0, 3756720.0, 3756690.0, 3756660.0,
        3756630.0, 3756600.0, 3756570.0, 3756540.0],
-      dtype='float64', name='y', length=1418))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-a0feccc5-ff08-40c5-8ea2-bd3418de0181" class="xr-index-data-in" type="checkbox"><label for="index-a0feccc5-ff08-40c5-8ea2-bd3418de0181" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([334410.0, 334440.0, 334470.0, 334500.0, 334530.0, 334560.0, 334590.0,
+      dtype='float64', name='y', length=1418))</pre></div></li><li class="xr-var-item"><div class="xr-index-name"><div>x</div></div><div class="xr-index-preview">PandasIndex</div><div></div><input id="index-e2d6c68b-0422-41c5-9509-c7cb2ce2cdc4" class="xr-index-data-in" type="checkbox"><label for="index-e2d6c68b-0422-41c5-9509-c7cb2ce2cdc4" title="Show/Hide index repr"><svg class="icon xr-icon-database"><use href="#icon-database"></use></svg></label><div class="xr-index-data"><pre>PandasIndex(Index([334410.0, 334440.0, 334470.0, 334500.0, 334530.0, 334560.0, 334590.0,
        334620.0, 334650.0, 334680.0,
        ...
        416370.0, 416400.0, 416430.0, 416460.0, 416490.0, 416520.0, 416550.0,
        416580.0, 416610.0, 416640.0],
-      dtype='float64', name='x', length=2742))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-fd10ce6a-8ec6-4fe3-8454-62fb52845091" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-fd10ce6a-8ec6-4fe3-8454-62fb52845091" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
+      dtype='float64', name='x', length=2742))</pre></div></li></ul></div></li><li class="xr-section-item"><input id="section-e327b2c8-d58e-40dd-9e08-4765784c98fe" class="xr-section-summary-in" type="checkbox" disabled=""><label for="section-e327b2c8-d58e-40dd-9e08-4765784c98fe" class="xr-section-summary" title="Expand/collapse section">Attributes: <span>(0)</span></label><div class="xr-section-inline-details"></div><div class="xr-section-details"><dl class="xr-attrs"></dl></div></li></ul></div></div>
 </div>
 </div>
 <p>When exploring the Landsat <code>xarray.Dataset</code>, we can see that the <strong>coordinates</strong> include x, y, time, and spatial_ref. The <strong>data variables</strong> are red, green, blue, nir08, and swir22. When checking the <strong>dimensions</strong> of the dataset at the top, we see that there are 1418 pixels in the y direction and 2742 pixels in the x direction, which makes up each data variable/band (red, green, blue, etc.). Click on the page icon to the right of the red variable- we see that the <strong>attributes</strong> included a spatial_ref. The other data variables contain the same attribute. There are many coordinate attributes for spatial_ref, including crs_wkt which tells us that the CRS should be EPSG 32611.</p>
@@ -861,7 +861,7 @@ Data variables:
 <section id="restoring-geospatial-information" class="level3">
 <h3 class="anchored" data-anchor-id="restoring-geospatial-information">3. Restoring geospatial information</h3>
 <p>After exploring our data, we need to restore the geospatial information to the Landsat <code>xarray.Dataset</code> and ensure that the coordinate reference systems for the fire perimeter data and Landsat data match before performing further analyses.</p>
-<div id="165894fd" class="cell" data-execution_count="9">
+<div id="188c08d9" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check CRS of Landsat data</span></span>
@@ -872,7 +872,7 @@ Data variables:
 </div>
 </div>
 <p><code>landsat</code> is not yet a geospatial object, but contains a CRS to apply in the spatial_ref variable.</p>
-<div id="353aec81" class="cell" data-execution_count="10">
+<div id="c11b3858" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the CRS contained in the crs_wkt attribute of the spatial_ref variable</span></span>
@@ -883,7 +883,7 @@ Data variables:
 </div>
 </div>
 <p>We can use this information to recover the geospatial information.</p>
-<div id="3db09198" class="cell" data-execution_count="11">
+<div id="95b796bb" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Recover geospatial information by setting CRS on Landsat xarray.Dataset</span></span>
@@ -895,7 +895,7 @@ Data variables:
 </div>
 </div>
 <p>Lastly, we need to ensure that all three data sets match in CRS.</p>
-<div id="daac42e8" class="cell" data-execution_count="12">
+<div id="cf00a84b" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject fire perimeter data to Landsat CRS</span></span>
@@ -916,7 +916,7 @@ Eaton and Landsat CRS match?: True</code></pre>
 <h3 class="anchored" data-anchor-id="true-color-image">4. True color image</h3>
 <p>The next step is to create a true color (RBG) image using our Landsat variables. In a true color image, the red, green, and blue RS bands are displayed in the red, green, blue channels, respectively.</p>
 <p>We first want to identify if there are NaN values to deal with before plotting the true color image and which bands these lie within.</p>
-<div id="883dc323" class="cell" data-execution_count="13">
+<div id="a32ba760" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify which bands have NaN values using a list of the bands</span></span>
@@ -932,7 +932,7 @@ There are 0 NaN values in the nir08 band.
 There are 0 NaN values in the swir22 band.</code></pre>
 </div>
 </div>
-<div id="7b58e32d" class="cell" data-execution_count="14">
+<div id="e14da50f" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># RGB image with substituted NaN values and adjusted scales</span></span>
@@ -952,7 +952,7 @@ There are 0 NaN values in the swir22 band.</code></pre>
 <section id="false-color-image" class="level3">
 <h3 class="anchored" data-anchor-id="false-color-image">5. False color image</h3>
 <p>Next, we want to plot a preliminary false color image using the short-wave infrared (swir22), near-infrared, and red variables mapped to the red, green, and blue channels respectively. This allows us to see non-visible wavelenghts and better show aspects of our environment like burn severity.</p>
-<div id="26cb327f" class="cell" data-execution_count="15">
+<div id="a99d84a9" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create false color image</span></span>
@@ -971,7 +971,7 @@ There are 0 NaN values in the swir22 band.</code></pre>
 <section id="map" class="level3">
 <h3 class="anchored" data-anchor-id="map">6. Map</h3>
 <p>Lastly, we want to combine all of our data into a visualization of false color fire scars and the original fire perimeters using <code>matplotlib</code>. Check out the code below to see how this was plotted in detail!</p>
-<div id="62259a1b" class="cell" data-execution_count="16">
+<div id="6cd4a4ea" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create map</span></span>
@@ -1041,7 +1041,7 @@ There are 0 NaN values in the swir22 band.</code></pre>
 <section id="eji-data-exploration" class="level3">
 <h3 class="anchored" data-anchor-id="eji-data-exploration">1. EJI data exploration</h3>
 <p>First, we want to import the EJI data and do some initial exploration.</p>
-<div id="1d98bf94" class="cell" data-execution_count="17">
+<div id="d2e64544" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load EJI data</span></span>
@@ -1067,7 +1067,7 @@ Eaton and EJI CRS match?: True</code></pre>
 </div>
 </div>
 <p>We need to spatially join the EJI data with the fire perimeters based on the geometry column, so we use an inner join to keep only the rows from EJI that intersect with the fire perimeter polygons.</p>
-<div id="43819859" class="cell" data-execution_count="18">
+<div id="b74441cf" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Spatially join EJI data with fire perimeters on geometry column</span></span>
@@ -1076,7 +1076,7 @@ Eaton and EJI CRS match?: True</code></pre>
 </details>
 </div>
 <p>Our data now contains both fire perimeter and EJI data.</p>
-<div id="a82ea14f" class="cell" data-execution_count="19">
+<div id="38290e4f" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confirm join</span></span>
@@ -1114,87 +1114,15 @@ Eaton and EJI CRS match?: True</code></pre>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">1328</th>
-<td>6505</td>
-<td>06</td>
-<td>037</td>
-<td>262706</td>
-<td>140000US06037262706</td>
-<td>06037262706</td>
-<td>06037262706</td>
-<td>Los Angeles County</td>
-<td>California</td>
-<td>CA</td>
-<td>...</td>
-<td>-999</td>
-<td>-999</td>
-<td>6486.563559</td>
-<td>2.147847e+06</td>
-<td>MULTIPOLYGON (((-13195148.412 4033844.678, -13...</td>
-<td>0</td>
-<td>1</td>
-<td>Heat Perimeter</td>
-<td>1182.082031</td>
-<td>267.101144</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">1328</th>
-<td>6505</td>
-<td>06</td>
-<td>037</td>
-<td>262706</td>
-<td>140000US06037262706</td>
-<td>06037262706</td>
-<td>06037262706</td>
-<td>Los Angeles County</td>
-<td>California</td>
-<td>CA</td>
-<td>...</td>
-<td>-999</td>
-<td>-999</td>
-<td>6486.563559</td>
-<td>2.147847e+06</td>
-<td>MULTIPOLYGON (((-13195148.412 4033844.678, -13...</td>
-<td>1</td>
-<td>2</td>
-<td>Heat Perimeter</td>
-<td>2222.488281</td>
-<td>185.498783</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">1328</th>
-<td>6505</td>
-<td>06</td>
-<td>037</td>
-<td>262706</td>
-<td>140000US06037262706</td>
-<td>06037262706</td>
-<td>06037262706</td>
-<td>Los Angeles County</td>
-<td>California</td>
-<td>CA</td>
-<td>...</td>
-<td>-999</td>
-<td>-999</td>
-<td>6486.563559</td>
-<td>2.147847e+06</td>
-<td>MULTIPOLYGON (((-13195148.412 4033844.678, -13...</td>
-<td>2</td>
-<td>3</td>
-<td>Heat Perimeter</td>
-<td>21.011719</td>
-<td>22.412814</td>
-</tr>
 </tbody>
 </table>
 
-<p>3 rows × 179 columns</p>
+<p>0 rows × 179 columns</p>
 </div>
 </div>
 </div>
 <p>When plotting this joined data, we see that the census tracts that were kept due to an intersection cover far more space than the fire perimeters, shown in dark red.</p>
-<div id="50681467" class="cell" data-execution_count="20">
+<div id="b6661682" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create exploratory map </span></span>
@@ -1218,10 +1146,16 @@ Eaton and EJI CRS match?: True</code></pre>
 <span id="cb28-19"><a href="#cb28-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb28-20"><a href="#cb28-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/tc/xh8th4j154nbqk7xcpcs2_bm0000gn/T/ipykernel_5540/3969682529.py:4: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  census_within_palisades.plot(ax=ax[0], color = "lightblue", edgecolor = "darkblue", linewidth = 0.5)
+/var/folders/tc/xh8th4j154nbqk7xcpcs2_bm0000gn/T/ipykernel_5540/3969682529.py:6: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  census_within_eaton.plot(ax=ax[1], color = "lightblue", edgecolor = "darkblue", linewidth = 0.5)</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-21-output-1.png" width="744" height="239" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-21-output-2.png" width="744" height="219" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1230,42 +1164,48 @@ Eaton and EJI CRS match?: True</code></pre>
 <section id="polygon-clipping" class="level3">
 <h3 class="anchored" data-anchor-id="polygon-clipping">3. Polygon clipping</h3>
 <p>To further reduce the census tracts to the fire perimeter boundaries, we will clip the census tracts to Palisades and Eaton fire perimeter using <code>geopandas.clip()</code>.</p>
-<div id="83984496" class="cell" data-execution_count="21">
+<div id="fa160a28" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>palisades_clipped <span class="op">=</span> gpd.clip(census_within_palisades, palisades)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>eaton_clipped <span class="op">=</span> gpd.clip(census_within_eaton, eaton)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>palisades_clipped <span class="op">=</span> gpd.clip(census_within_palisades, palisades)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>eaton_clipped <span class="op">=</span> gpd.clip(census_within_eaton, eaton)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
-<div id="baddba26" class="cell" data-execution_count="22">
+<div id="b107f4f0" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create exploratory map </span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>,<span class="dv">5</span>), nrows <span class="op">=</span> <span class="dv">1</span>, ncols <span class="op">=</span> <span class="dv">2</span>)</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>palisades.boundary.plot(ax<span class="op">=</span>ax[<span class="dv">0</span>], color <span class="op">=</span> <span class="st">'darkred'</span>)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>palisades_clipped.plot(ax<span class="op">=</span>ax[<span class="dv">0</span>], color <span class="op">=</span> <span class="st">"lightblue"</span>, edgecolor <span class="op">=</span> <span class="st">"darkblue"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span>)</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>eaton.boundary.plot(ax<span class="op">=</span>ax[<span class="dv">1</span>], color <span class="op">=</span> <span class="st">'darkred'</span>)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>eaton_clipped.plot(ax<span class="op">=</span>ax[<span class="dv">1</span>], color <span class="op">=</span> <span class="st">"lightblue"</span>, edgecolor <span class="op">=</span> <span class="st">"darkblue"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span>)</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> ax:</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>  a.axis(<span class="st">'off'</span>)</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add legends</span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a>legend_elements <span class="op">=</span> [</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a>    Patch(facecolor <span class="op">=</span> <span class="st">'darkred'</span>, edgecolor <span class="op">=</span> <span class="st">'darkred'</span>, label <span class="op">=</span> <span class="st">'Fire perimeters'</span>),</span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true" tabindex="-1"></a>    Patch(facecolor <span class="op">=</span> <span class="st">'darkblue'</span>, edgecolor <span class="op">=</span> <span class="st">'darkblue'</span>, label <span class="op">=</span> <span class="st">'Census tract boundaries'</span>)</span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].legend(handles <span class="op">=</span> legend_elements, loc <span class="op">=</span> <span class="st">'upper left'</span>, bbox_to_anchor<span class="op">=</span>(<span class="op">-</span><span class="fl">0.2</span>, <span class="fl">1.05</span>), fontsize <span class="op">=</span> <span class="dv">8</span>)</span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create exploratory map </span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">9</span>,<span class="dv">5</span>), nrows <span class="op">=</span> <span class="dv">1</span>, ncols <span class="op">=</span> <span class="dv">2</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>palisades.boundary.plot(ax<span class="op">=</span>ax[<span class="dv">0</span>], color <span class="op">=</span> <span class="st">'darkred'</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>palisades_clipped.plot(ax<span class="op">=</span>ax[<span class="dv">0</span>], color <span class="op">=</span> <span class="st">"lightblue"</span>, edgecolor <span class="op">=</span> <span class="st">"darkblue"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>eaton.boundary.plot(ax<span class="op">=</span>ax[<span class="dv">1</span>], color <span class="op">=</span> <span class="st">'darkred'</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>eaton_clipped.plot(ax<span class="op">=</span>ax[<span class="dv">1</span>], color <span class="op">=</span> <span class="st">"lightblue"</span>, edgecolor <span class="op">=</span> <span class="st">"darkblue"</span>, linewidth <span class="op">=</span> <span class="fl">0.5</span>)</span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> a <span class="kw">in</span> ax:</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  a.axis(<span class="st">'off'</span>)</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Add legends</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>legend_elements <span class="op">=</span> [</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    Patch(facecolor <span class="op">=</span> <span class="st">'darkred'</span>, edgecolor <span class="op">=</span> <span class="st">'darkred'</span>, label <span class="op">=</span> <span class="st">'Fire perimeters'</span>),</span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    Patch(facecolor <span class="op">=</span> <span class="st">'darkblue'</span>, edgecolor <span class="op">=</span> <span class="st">'darkblue'</span>, label <span class="op">=</span> <span class="st">'Census tract boundaries'</span>)</span>
+<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>ax[<span class="dv">0</span>].legend(handles <span class="op">=</span> legend_elements, loc <span class="op">=</span> <span class="st">'upper left'</span>, bbox_to_anchor<span class="op">=</span>(<span class="op">-</span><span class="fl">0.2</span>, <span class="fl">1.05</span>), fontsize <span class="op">=</span> <span class="dv">8</span>)</span>
+<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/tc/xh8th4j154nbqk7xcpcs2_bm0000gn/T/ipykernel_5540/2569328224.py:5: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  palisades_clipped.plot(ax=ax[0], color = "lightblue", edgecolor = "darkblue", linewidth = 0.5)
+/var/folders/tc/xh8th4j154nbqk7xcpcs2_bm0000gn/T/ipykernel_5540/2569328224.py:7: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  eaton_clipped.plot(ax=ax[1], color = "lightblue", edgecolor = "darkblue", linewidth = 0.5)</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-23-output-1.png" width="744" height="219" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-23-output-2.png" width="744" height="219" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -1274,55 +1214,61 @@ Eaton and EJI CRS match?: True</code></pre>
 <section id="visualize-eji-data" class="level3">
 <h3 class="anchored" data-anchor-id="visualize-eji-data">5. Visualize EJI data</h3>
 <p>Lastly, we can use these clipped polygons to visualize the values of our variable of interest (percentage of persons without internet) within the census tracts within the fire perimeters.</p>
-<div id="422f6f3d" class="cell" data-execution_count="23">
+<div id="85a4c38a" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Include our EJI variable</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>eji_variable <span class="op">=</span> <span class="st">'E_NOINT'</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Find common min/max for legend range</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>vmin <span class="op">=</span> <span class="bu">min</span>(census_within_palisades[eji_variable].<span class="bu">min</span>(), census_within_eaton[eji_variable].<span class="bu">min</span>())</span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>vmax <span class="op">=</span> <span class="bu">max</span>(census_within_palisades[eji_variable].<span class="bu">max</span>(), census_within_eaton[eji_variable].<span class="bu">max</span>())</span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Palisades perimeter</span></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>palisades_clipped.plot(</span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>    column<span class="op">=</span> eji_variable,</span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>    cmap <span class="op">=</span> <span class="st">'PuBuGn'</span>,</span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a>    vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax,</span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax1,</span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb31-18"><a href="#cb31-18" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'Palisades Fire'</span>)</span>
-<span id="cb31-19"><a href="#cb31-19" aria-hidden="true" tabindex="-1"></a>ax1.axis(<span class="st">'off'</span>)</span>
-<span id="cb31-20"><a href="#cb31-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-21"><a href="#cb31-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Eaton perimeter</span></span>
-<span id="cb31-22"><a href="#cb31-22" aria-hidden="true" tabindex="-1"></a>eaton_clipped.plot(</span>
-<span id="cb31-23"><a href="#cb31-23" aria-hidden="true" tabindex="-1"></a>    column<span class="op">=</span>eji_variable,</span>
-<span id="cb31-24"><a href="#cb31-24" aria-hidden="true" tabindex="-1"></a>    cmap <span class="op">=</span> <span class="st">'PuBuGn'</span>,</span>
-<span id="cb31-25"><a href="#cb31-25" aria-hidden="true" tabindex="-1"></a>    vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax,</span>
-<span id="cb31-26"><a href="#cb31-26" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb31-27"><a href="#cb31-27" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax2,</span>
-<span id="cb31-28"><a href="#cb31-28" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb31-29"><a href="#cb31-29" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'Eaton Fire'</span>)</span>
-<span id="cb31-30"><a href="#cb31-30" aria-hidden="true" tabindex="-1"></a>ax2.axis(<span class="st">'off'</span>)</span>
-<span id="cb31-31"><a href="#cb31-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-32"><a href="#cb31-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Add overall title</span></span>
-<span id="cb31-33"><a href="#cb31-33" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Percentage of Persons Without Internet - Fire Areas Comparison'</span>)</span>
-<span id="cb31-34"><a href="#cb31-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-35"><a href="#cb31-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Add shared colorbar at the bottom</span></span>
-<span id="cb31-36"><a href="#cb31-36" aria-hidden="true" tabindex="-1"></a>sm <span class="op">=</span> plt.cm.ScalarMappable(cmap<span class="op">=</span> <span class="st">'PuBuGn'</span>, norm<span class="op">=</span>plt.Normalize(vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax))</span>
-<span id="cb31-37"><a href="#cb31-37" aria-hidden="true" tabindex="-1"></a>cbar_ax <span class="op">=</span> fig.add_axes([<span class="fl">0.25</span>, <span class="fl">0.08</span>, <span class="fl">0.5</span>, <span class="fl">0.02</span>])  <span class="co"># [left, bottom, width, height]</span></span>
-<span id="cb31-38"><a href="#cb31-38" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> fig.colorbar(sm, cax<span class="op">=</span>cbar_ax, orientation<span class="op">=</span><span class="st">'horizontal'</span>)</span>
-<span id="cb31-39"><a href="#cb31-39" aria-hidden="true" tabindex="-1"></a>cbar.set_label(<span class="st">'Persons without internet (%)'</span>)</span>
-<span id="cb31-40"><a href="#cb31-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-41"><a href="#cb31-41" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fig, (ax1, ax2) <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="dv">5</span>))</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Include our EJI variable</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>eji_variable <span class="op">=</span> <span class="st">'E_NOINT'</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Find common min/max for legend range</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>vmin <span class="op">=</span> <span class="bu">min</span>(census_within_palisades[eji_variable].<span class="bu">min</span>(), census_within_eaton[eji_variable].<span class="bu">min</span>())</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>vmax <span class="op">=</span> <span class="bu">max</span>(census_within_palisades[eji_variable].<span class="bu">max</span>(), census_within_eaton[eji_variable].<span class="bu">max</span>())</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Palisades perimeter</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>palisades_clipped.plot(</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>    column<span class="op">=</span> eji_variable,</span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a>    cmap <span class="op">=</span> <span class="st">'PuBuGn'</span>,</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>    vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax,</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax1,</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-18"><a href="#cb33-18" aria-hidden="true" tabindex="-1"></a>ax1.set_title(<span class="st">'Palisades Fire'</span>)</span>
+<span id="cb33-19"><a href="#cb33-19" aria-hidden="true" tabindex="-1"></a>ax1.axis(<span class="st">'off'</span>)</span>
+<span id="cb33-20"><a href="#cb33-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-21"><a href="#cb33-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot census tracts within Eaton perimeter</span></span>
+<span id="cb33-22"><a href="#cb33-22" aria-hidden="true" tabindex="-1"></a>eaton_clipped.plot(</span>
+<span id="cb33-23"><a href="#cb33-23" aria-hidden="true" tabindex="-1"></a>    column<span class="op">=</span>eji_variable,</span>
+<span id="cb33-24"><a href="#cb33-24" aria-hidden="true" tabindex="-1"></a>    cmap <span class="op">=</span> <span class="st">'PuBuGn'</span>,</span>
+<span id="cb33-25"><a href="#cb33-25" aria-hidden="true" tabindex="-1"></a>    vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax,</span>
+<span id="cb33-26"><a href="#cb33-26" aria-hidden="true" tabindex="-1"></a>    legend<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb33-27"><a href="#cb33-27" aria-hidden="true" tabindex="-1"></a>    ax<span class="op">=</span>ax2,</span>
+<span id="cb33-28"><a href="#cb33-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-29"><a href="#cb33-29" aria-hidden="true" tabindex="-1"></a>ax2.set_title(<span class="st">'Eaton Fire'</span>)</span>
+<span id="cb33-30"><a href="#cb33-30" aria-hidden="true" tabindex="-1"></a>ax2.axis(<span class="st">'off'</span>)</span>
+<span id="cb33-31"><a href="#cb33-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-32"><a href="#cb33-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Add overall title</span></span>
+<span id="cb33-33"><a href="#cb33-33" aria-hidden="true" tabindex="-1"></a>fig.suptitle(<span class="st">'Percentage of Persons Without Internet - Fire Areas Comparison'</span>)</span>
+<span id="cb33-34"><a href="#cb33-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-35"><a href="#cb33-35" aria-hidden="true" tabindex="-1"></a><span class="co"># Add shared colorbar at the bottom</span></span>
+<span id="cb33-36"><a href="#cb33-36" aria-hidden="true" tabindex="-1"></a>sm <span class="op">=</span> plt.cm.ScalarMappable(cmap<span class="op">=</span> <span class="st">'PuBuGn'</span>, norm<span class="op">=</span>plt.Normalize(vmin<span class="op">=</span>vmin, vmax<span class="op">=</span>vmax))</span>
+<span id="cb33-37"><a href="#cb33-37" aria-hidden="true" tabindex="-1"></a>cbar_ax <span class="op">=</span> fig.add_axes([<span class="fl">0.25</span>, <span class="fl">0.08</span>, <span class="fl">0.5</span>, <span class="fl">0.02</span>])  <span class="co"># [left, bottom, width, height]</span></span>
+<span id="cb33-38"><a href="#cb33-38" aria-hidden="true" tabindex="-1"></a>cbar <span class="op">=</span> fig.colorbar(sm, cax<span class="op">=</span>cbar_ax, orientation<span class="op">=</span><span class="st">'horizontal'</span>)</span>
+<span id="cb33-39"><a href="#cb33-39" aria-hidden="true" tabindex="-1"></a>cbar.set_label(<span class="st">'Persons without internet (%)'</span>)</span>
+<span id="cb33-40"><a href="#cb33-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-41"><a href="#cb33-41" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/var/folders/tc/xh8th4j154nbqk7xcpcs2_bm0000gn/T/ipykernel_5540/1075666631.py:11: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  palisades_clipped.plot(
+/var/folders/tc/xh8th4j154nbqk7xcpcs2_bm0000gn/T/ipykernel_5540/1075666631.py:22: UserWarning: The GeoDataFrame you are attempting to plot is empty. Nothing has been displayed.
+  eaton_clipped.plot(</code></pre>
+</div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/cell-24-output-1.png" width="763" height="492" class="figure-img"></p>
+<p><img src="index_files/figure-html/cell-24-output-2.png" width="763" height="492" class="figure-img"></p>
 </figure>
 </div>
 </div>

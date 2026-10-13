@@ -3,7 +3,7 @@ title: "A New Form of Data Processing for Environmental Consulting"
 description: "How the Bio Weaver Tool simplifies and standardizes data processing for Rincon Consultants Inc."
 date: 2026-06-20
 categories: [MEDS, Python]
-image: cover.jpg
+image: cover.png
 citation:
   url: https://avarobillard.github.io/posts/capstone
 draft: false
