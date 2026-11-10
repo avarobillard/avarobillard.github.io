@@ -17,7 +17,7 @@ about:
 ---
 
 
-Hi! I'm Ava, a **data scientist** with a background in **plant science**. I recently graduated with a Master's in Environmental Data Science from the Bren School of Environmental Science & Management, where I developed my expertise in geospatial analysis, machine learning, and data visualization. I'm always striving to learn and create in my work, and I especially value the growth that comes from working at the intersection of biological and technical fields. When I’m not busy coding, you can usually find me outside in the sunshine, curating my Pinterest boards and Spotify playlists to perfection, or possibly adopting another plant.
+Hi! I'm Ava, a **data scientist** with a background in **plant science**. I recently graduated with a Master's in Environmental Data Science from the Bren School of Environmental Science & Management, where I developed my expertise in geospatial analysis, data management, and data visualization. I'm always striving to learn and create in my work, and I especially value the growth that comes from working at the intersection of environmental and technical fields. When I’m not busy coding, you can usually find me outside in the sunshine, curating my Pinterest boards and Spotify playlists to perfection, or possibly adopting another plant.
 
 Please **[check out my resume](AvaRobillard_Resume.pdf){target="_blank"}** and explore my website to gain a fuller picture of my experience as an environmental data scientist! 
 
