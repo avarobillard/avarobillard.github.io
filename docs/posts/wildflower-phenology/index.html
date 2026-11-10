@@ -229,6 +229,8 @@ div.csl-indent {
    
   <ul>
   <li><a href="#wildflower-watch-years-in-bloom" id="toc-wildflower-watch-years-in-bloom" class="nav-link active" data-scroll-target="#wildflower-watch-years-in-bloom">Wildflower Watch: Years in Bloom</a></li>
+  <li><a href="#overall-design" id="toc-overall-design" class="nav-link" data-scroll-target="#overall-design">Overall design</a></li>
+  <li><a href="#plots" id="toc-plots" class="nav-link" data-scroll-target="#plots">Plots</a></li>
   </ul>
 </nav>
     </div>
@@ -243,29 +245,50 @@ div.csl-indent {
 <h2 class="anchored" data-anchor-id="wildflower-watch-years-in-bloom">Wildflower Watch: Years in Bloom</h2>
 <section id="exploring-the-whats-in-season-data-collected-by-volunteers-at-the-lady-bird-johnson-wildflower-center" class="level4">
 <h4 class="anchored" data-anchor-id="exploring-the-whats-in-season-data-collected-by-volunteers-at-the-lady-bird-johnson-wildflower-center">Exploring the “What’s in Season” data, collected by volunteers at the Lady Bird Johnson Wildflower Center</h4>
+<p>Growing up in Texas, my grandmother used to take me to the Wildflower Center to watch the butterflies around the pollinator gardens as a child, and it was wonderful to be able to apply my education in plant science and data science to produce a visualization based around the same flowers and gardens.</p>
 <p>The University of Texas at Austin Lady Bird Johnson Wildflower Center is the Botanic Garden of Texas, with a mission to inspire the conservation and cultivation of native plants. The Wildflower Center was founded by Lady Bird Johnson and Helen Hayes as the National Wildflower Research Center in 1982 and later renamed the Lady Bird Johnson Wildflower Center in 1997, and is a signature piece of Mrs.&nbsp;Johnson’s environmental legacy <span class="citation" data-cites="wildflowercenter">(<a href="#ref-wildflowercenter" role="doc-biblioref">Lady Bird Johnson Wildflower Center 2026a</a>)</span>.</p>
+<p>The data I analyzed was sourced from the “What’s in Season” tracker, a plant list of 1-24 species collected by approximately 20 volunteers at the Wildflower Center over a period of 15 years (2011 to present day). These plants were noted for being in bloom, growing, making seeds, or being otherwise noticeable.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="ladybird.jpg" class="img-fluid figure-img" style="width:80.0%" alt="Image of Lady Bird Johnson perched on a rock"></p>
+<p><img src="ladybird.jpg" class="img-fluid figure-img" style="width:70.0%" alt="Image of Lady Bird Johnson perched on a rock"></p>
 <figcaption>Lady Bird Johnson- <span class="citation" data-cites="ladybirdday">(<a href="#ref-ladybirdday" role="doc-biblioref">Lady Bird Johnson Wildflower Center 2026b</a>)</span></figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>As a native Texan, this project was especially meaningful to me. My grandmother used to take me to the Wildflower Center to watch the butterflies around the pollinator gardens as a child, and it was wonderful to be able to apply my education in plant science and data science to produce a visualization based around the same flowers and gardens.</p>
-<p>The data comes from the “What’s in Season” tracker, a plant list of 1-24 species collected by approximately 20 volunteers at the Wildflower Center over a period of 15 years (2011 to present day). These plants were noted for being in bloom, growing, making seeds, or being otherwise noticeable.</p>
+<p>Native plants provide a variety of benefits, including water conservation, providing habitat for birds, pollinators, and other wildlife, protecting soils, mitigating flooding, reducing mowing costs, and saving money on fertilizer and pesticides. These plants support balanced, hardy ecosystems and give us a sense of place. Using data from the “What’s in Season” tracker, I created an infographic to address the following questions about the native plants observed by volunteers over the years at the Wildflower Center:</p>
+<ul>
+<li>How many unique species were observed?</li>
+<li>Have there been any shifts in phenology over time?</li>
+<li>What were the most commonly observed species, overall and by month?</li>
+<li>When did these species bloom throughout the year?</li>
+</ul>
 <p>You can explore the “What’s in Season” tracker <a href="https://www.wildflower.org/whatsinseason">here</a>.</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="Infographic.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:100.0%" alt="Full infographic exploring wildflower diveristy."></p>
+<p><img src="Infographic.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%" alt="Full infographic exploring wildflower diveristy."></p>
 </figure>
 </div>
 </div>
 </div>
+<p>Overall, my I found that many species were observed very frequently with over 100 observations, such as Mealy blue sage, Rock rose, and Chocolate daisy. However, there was still a lot of variety in these observations, as 105 species were only noted once between 2011 and 2026. I designed heat maps exploring how the frequency of observations changed over the years for the top species, and did not notice any common pattern or shift in blooming times. Exploring the most commonly noted species in each month was very interesting, with Rock rose appearing throughout the summer months and Possumhaw in the winter. The Bluebonnet being the most commonly noted in March is no surprise, as this is the peak blooming period for the Texas state flower!</p>
+<p>Understanding the patterns in when native species are noticeable to people is very important for encouraging the adoption of native plants in gardens and landscapes, from keeping well-loved seasonal natives in stock at plant nurseries to providing more diverse options and encouraging the planting of species that are typically less noticed or common.</p>
+<p>My infographic is made up of three plots which were created using the {ggplot2} package in R and Affinity Designer. Let’s explore some key pieces and the behind-the-scenes of my design choices!</p>
+</section>
+</section>
+<section id="overall-design" class="level2">
+<h2 class="anchored" data-anchor-id="overall-design">Overall design</h2>
+<p>For my <strong>font</strong>, I selected <strong>Rubik</strong> for headings and titles and <strong>Karla</strong> for subtitles, axes, and captions. <strong>Rubik</strong> was a font I selected to closely match the branding used by the Wildflower Center, accessible through Google Fonts for use in R and Affinity.</p>
+<p>For my <strong>color palette</strong>, I color matched the green from the Wildflower Center website, and created a custom palette in R for each species I included. These colors were sourced using a color picker in my browser, <a href="https://chromewebstore.google.com/detail/colorzilla/bhlhnicpbhignbdhedgjhgdocnmhomnp">ColorZilla</a>, which allowed me to extract hex codes from images of the flower I was analyzing from the Wildflower Center plant images database.</p>
+</section>
+<section id="plots" class="level2">
+<h2 class="anchored" data-anchor-id="plots">Plots</h2>
+<p>I Always enjoy incorporating hand-drawn illustrations into my data visualizations, and was able to do so with the <strong>Flowers of the year</strong> plot. It was important to include these drawings to associate numbers and data with a recognizable flower. I used Goodnotes to sketch each flower, and exported the image into GIMP, another graphic design platform, to make the image background transparent. Finally, I imported each flower into Affinity and aligned them over each month. I later added the Zigzag Iris and Rock rose to the bar chart and heat map to create balance throughout the infographic.</p>
+<p>The full repository can be accessed on GitHub <a href="https://github.com/avarobillard/wildflower-phenology">here</a>.</p>
 <p>If you would like to explore the code used to make these plots, see below!</p>
 <div class="cell">
 <details class="code-fold">
@@ -500,7 +523,6 @@ div.csl-indent {
 
 
 
-</section>
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">

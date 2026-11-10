@@ -357,5 +357,18 @@ p3 <-  ggplot(income_levels, aes(x = income_bin, y = n_species)) +
 ggsave(here("figures", "income_boxplot.pdf"), width = 6, height = 8, dpi = 150)
 ```
 
+### Bonus content! (November 2026)
 
+I had the opportunity to attend a Trees Count event and help collect data for the 2025 Tree Census! I learned how to use ArcGIS FieldMaps and got to relive my Forest Ecology days, identifying trees by their leaf shape and measuring their DBH.
+
+```{r}
+#| code-fold: TRUE
+#| eval: true
+#| echo: false
+#| fig-align: "center"
+#| out-width: "80%"
+#| fig-cap: "Trees Count 2025"
+#| fig-alt: "Image of tree census volunteers measuring a large tree"
+knitr::include_graphics("treecensus2025.jpg")
+```
 
