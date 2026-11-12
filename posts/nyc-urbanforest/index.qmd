@@ -104,7 +104,7 @@ This was definitely a complex process but an incredibly useful method to know if
 #| eval: true
 #| echo: false
 #| fig-align: "center"
-#| out-width: "70%"
+#| out-width: "60%"
 #| fig-alt: "Drawing of five skyscrapers that resemble a bar chart."
 knitr::include_graphics("drawing.jpg")
 ```
@@ -357,18 +357,21 @@ p3 <-  ggplot(income_levels, aes(x = income_bin, y = n_species)) +
 ggsave(here("figures", "income_boxplot.pdf"), width = 6, height = 8, dpi = 150)
 ```
 
-### Bonus content! (November 2026)
+### Trees Count Volunteering (November 2026)
 
-I had the opportunity to attend a Trees Count event and help collect data for the 2025 Tree Census! I learned how to use ArcGIS FieldMaps and got to relive my Forest Ecology days, identifying trees by their leaf shape and measuring their DBH.
+I had the opportunity to attend a Trees Count event and help collect data for the 2025 Tree Census! I learned how to use ArcGIS Field Maps and got to relive my Forest Ecology days, identifying trees by their leaf shape and measuring their DBH. It was great to experience another part of the data lifecycle firsthand, contributing to the data collection for the next version of the census data I analyzed for this project!
 
 ```{r}
 #| code-fold: TRUE
 #| eval: true
 #| echo: false
 #| fig-align: "center"
-#| out-width: "80%"
+#| out-width: "60%"
 #| fig-cap: "Trees Count 2025"
 #| fig-alt: "Image of tree census volunteers measuring a large tree"
 knitr::include_graphics("treecensus2025.jpg")
 ```
 
+### Media
+
+I was honored to have this infographic featured in a Bren article alongside some of my peers' amazing data visualizations. You can read the article [here](https://bren.ucsb.edu/news/telling-environmental-stories-through-data-winter-2026-final-projects-eds-240).
